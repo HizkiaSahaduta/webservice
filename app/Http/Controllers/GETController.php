@@ -762,4 +762,64 @@ class GETController extends Controller
         }
 
     }
+
+    public function listEntity() {
+
+        $result = DB::connection("sqlsrv3")
+        ->select(DB::raw("select 
+        case
+            when custGroup = 'LAIN' then 'OTHER' 
+            else custGroup
+        end as entity from View_wh_perform
+        group by custGroup"));
+
+        return response()->json($result);
+    }
+
+    public function getListProduk(Request $request)
+    {
+        $sqlWhere = "1=1";
+
+        if($request->txtDelivId != null)
+        {
+            $txtDelivId = $request->txtDelivId;
+        }
+        else
+        {
+            $txtDelivId = '';
+        }
+
+        if (!empty($txtDelivId))
+        {
+            $sqlWhere = "a.deliv_id = ". "'" . $txtDelivId . "'";
+        }
+
+        $RawMatsResult = DB::connection('sqlsrv5')
+                                ->table('deliv_hdr as a')
+                                ->select('a.deliv_id', 'a.order_id', 'a.dt_trx', 'c.coil_id', 'd.descr as nama_produk', 'e.descr as category', 'b.wgt', 'b.length', 'd.unit_meas')
+                                ->leftJoin('deliv_item as b', function($join){
+                                    $join->on('b.deliv_id', '=', 'a.deliv_id')
+                                         ->on('b.order_id', '=', 'a.order_id');
+                                })
+                                // ->join('deliv_unit as c', 'c.deliv_id', '=', 'a.deliv_id')
+                                ->join('deliv_unit as c', function($join){
+                                    $join->on('c.deliv_id', '=', 'a.deliv_id')
+                                         ->on('c.deliv_id', '=', 'b.deliv_id')
+                                         ->on('c.deliv_seq', '=', 'b.deliv_seq');
+                                })
+                                ->join('prod_spec as d', 'd.prod_code', '=', 'b.prod_code', 'left outer')
+                                ->join('category as e', 'e.category_id', '=', 'd.category_id', 'left outer')
+                                ->whereRaw($sqlWhere)
+                                ->orderBy('a.dt_trx', 'desc')
+                                ->get();
+        
+        return \DataTables::of($RawMatsResult)
+                            ->addColumn('tgl_transaksi', function ($data) {
+                                $stat = '<span class="badge badge-info">' . short_date($data->dt_trx) . '</span>';
+
+                                return $stat;
+                            })
+                            ->rawColumns(['tgl_transaksi'])
+                            ->make(true);  
+    }
 }

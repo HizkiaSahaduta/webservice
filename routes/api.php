@@ -42,6 +42,10 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/dashboardOrderCustGroup', 'GETController@dashboardOrderCustGroup')->middleware('api.admin')->name('dashboardOrderCustGroup');
     Route::get('/dashboardOrderbyCustID', 'GETController@dashboardOrderbyCustID')->middleware('api.admin')->name('dashboardOrderbyCustID');
     Route::get('/getOutstandingDeliv', 'GETController@getOutstandingDeliv')->middleware('api.admin')->name('getOutstandingDeliv');
+    Route::get('/getListEntity', 'GETController@listEntity')->middleware('api.admin')->name('getListEntity');
+    Route::post('/getListProduk', 'GETController@getListProduk')->middleware('api.admin')->name('getListProduk');
+
+
 
 
     // POST Request
@@ -50,7 +54,6 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/setUnApprove', 'POSTController@setUnApprove')->middleware('api.admin')->name('setUnApprove');
     Route::post('/setDelivConfirm', 'POSTController@setDelivConfirm')->middleware('api.admin')->name('setDelivConfirm');
     Route::post('/submitApproval', 'POSTController@submitApproval')->middleware('api.admin')->name('submitApproval');
-    Route::post('/getListOrder', 'POSTController@getListOrder')->middleware('api.admin')->name('getListOrder');
     
     
 });
