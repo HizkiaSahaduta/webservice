@@ -812,14 +812,8 @@ class GETController extends Controller
                                 ->whereRaw($sqlWhere)
                                 ->orderBy('a.dt_trx', 'desc')
                                 ->get();
+                                
+        return response($RawMatsResult, 200);
         
-        return \DataTables::of($RawMatsResult)
-                            ->addColumn('tgl_transaksi', function ($data) {
-                                $stat = '<span class="badge badge-info">' . short_date($data->dt_trx) . '</span>';
-
-                                return $stat;
-                            })
-                            ->rawColumns(['tgl_transaksi'])
-                            ->make(true);  
     }
 }
