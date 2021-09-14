@@ -27,6 +27,11 @@ Route::group(['middleware' => ['cors', 'json.response']], function () {
     Route::get('/getUserExist', 'GETController@getUserExist')->name('getUserExist');
     Route::get('/getQuoteDetail', 'GETController@getQuoteDetail')->name('getQuoteDetail');
     Route::get('/getQuoteDetailConfirmed', 'GETController@getQuoteDetailConfirmed')->name('getQuoteDetailConfirmed');
+    
+    Route::middleware('auth:api')->group(function () {
+        Route::get('/getListEntity', 'GETController@listEntity')->middleware('api.admin')->name('getListEntity');
+        Route::post('/getListProduk', 'GETController@getListProduk')->middleware('api.admin')->name('getListProduk');
+    });
 });
 
 Route::middleware('auth:api')->group(function () {
@@ -42,8 +47,6 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/dashboardOrderCustGroup', 'GETController@dashboardOrderCustGroup')->middleware('api.admin')->name('dashboardOrderCustGroup');
     Route::get('/dashboardOrderbyCustID', 'GETController@dashboardOrderbyCustID')->middleware('api.admin')->name('dashboardOrderbyCustID');
     Route::get('/getOutstandingDeliv', 'GETController@getOutstandingDeliv')->middleware('api.admin')->name('getOutstandingDeliv');
-    Route::get('/getListEntity', 'GETController@listEntity')->middleware('api.admin')->name('getListEntity');
-    Route::post('/getListProduk', 'GETController@getListProduk')->middleware('api.admin')->name('getListProduk');
 
 
 
