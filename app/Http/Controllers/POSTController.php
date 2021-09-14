@@ -14,7 +14,8 @@ class POSTController extends Controller
 
         $userid = $request->userid;
         $po_id = $request->po_id;   
-        $tr_date = Carbon::now();
+        // $tr_date = Carbon::now();
+        $tr_date = now();
 
         try{
 
@@ -77,7 +78,8 @@ class POSTController extends Controller
 
         $userid = $request->userid;
         $po_id = $request->po_id;   
-        $tr_date = Carbon::now();
+        // $tr_date = Carbon::now();
+        $tr_date = now();
 
         try{
 
@@ -137,7 +139,8 @@ class POSTController extends Controller
 
         $userid = $request->userid;
         $po_id = $request->po_id;   
-        $tr_date = Carbon::now();
+        // $tr_date = Carbon::now();
+        $tr_date = now();
 
         try{
 
@@ -200,7 +203,8 @@ class POSTController extends Controller
         $userid = $request->userid;
         $deliv_id = $request->deliv_id;  
         $order_id = $request->order_id;   
-        $tr_date = Carbon::now();
+        // $tr_date = Carbon::now();
+        $tr_date = now();
 
         try{
 
@@ -262,7 +266,8 @@ class POSTController extends Controller
     public function submitApproval (Request $request) {
 
         // $userid = $request->userid;
-        $tr_date = Carbon::now();
+        // $tr_date = Carbon::now();
+        $tr_date = now();
         $quoteID = $request->quoteID;
         $poID = $request->poID;
         $listApproval = $request->listApproval;
