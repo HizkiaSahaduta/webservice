@@ -794,7 +794,7 @@ class GETController extends Controller
             $sqlWhere = "a.deliv_id = ". "'" . $txtDelivId . "'";
         }
 
-        $RawMatsResult = DB::connection('sqlsrv5')
+        $RawMatsResult = DB::connection('sqlsrv4')
                                 ->table('deliv_hdr as a')
                                 ->select('a.deliv_id', 'a.order_id', 'a.dt_trx', 'c.coil_id', 'd.descr as nama_produk', 'e.descr as category', 'b.wgt', 'b.length', 'd.unit_meas')
                                 ->leftJoin('deliv_item as b', function($join){

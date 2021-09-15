@@ -57,6 +57,7 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/setUnApprove', 'POSTController@setUnApprove')->middleware('api.admin')->name('setUnApprove');
     Route::post('/setDelivConfirm', 'POSTController@setDelivConfirm')->middleware('api.admin')->name('setDelivConfirm');
     Route::post('/submitApproval', 'POSTController@submitApproval')->middleware('api.admin')->name('submitApproval');
+    Route::post('/getListOrder', 'POSTController@getListOrder')->middleware('api.admin')->name('getListOrder');
     
     
 });
