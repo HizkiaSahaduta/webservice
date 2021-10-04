@@ -791,10 +791,10 @@ class GETController extends Controller
 
         if (!empty($txtCoilId))
         {
-            $sqlWhere = "a.coil_id = ". "'" . $txtCoilId . "' and a.stat = 'S'";
+            $sqlWhere = "a.coil_id = ". "'" . $txtCoilId . "' and a.stat = 'S' and a.tr_type = 'SA'";
         }
 
-        $RawMatsResult = DB::connection('sqlsrv5')
+        $RawMatsResult = DB::connection('sqlsrv4')
                                 ->table('deliv_unit as a')
                                 ->select('a.deliv_id','a.dt_modified', 'a.coil_id', 'a.wgt', 'd.unit_meas', 'd.descr as nama_produk', 'e.descr as category')
                                 ->leftJoin('deliv_item as b', function($join){
