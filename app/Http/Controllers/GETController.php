@@ -780,37 +780,31 @@ class GETController extends Controller
     {
         $sqlWhere = "1=1";
 
-        if($request->txtDelivId != null)
+        if($request->txtCoilId != null)
         {
-            $txtDelivId = $request->txtDelivId;
+            $txtCoilId = $request->txtCoilId;
         }
         else
         {
-            $txtDelivId = '';
+            $txtCoilId = '';
         }
 
-        if (!empty($txtDelivId))
+        if (!empty($txtCoilId))
         {
-            $sqlWhere = "a.deliv_id = ". "'" . $txtDelivId . "'";
+            $sqlWhere = "a.coil_id = ". "'" . $txtCoilId . "' and a.stat = 'S'";
         }
 
         $RawMatsResult = DB::connection('sqlsrv5')
-                                ->table('deliv_hdr as a')
-                                ->select('a.deliv_id', 'a.order_id', 'a.dt_trx', 'c.coil_id', 'd.descr as nama_produk', 'e.descr as category', 'b.wgt', 'b.length', 'd.unit_meas')
+                                ->table('deliv_unit as a')
+                                ->select('a.deliv_id','a.dt_modified', 'a.coil_id', 'a.wgt', 'd.unit_meas', 'd.descr as nama_produk', 'e.descr as category')
                                 ->leftJoin('deliv_item as b', function($join){
                                     $join->on('b.deliv_id', '=', 'a.deliv_id')
-                                         ->on('b.order_id', '=', 'a.order_id');
-                                })
-                                // ->join('deliv_unit as c', 'c.deliv_id', '=', 'a.deliv_id')
-                                ->join('deliv_unit as c', function($join){
-                                    $join->on('c.deliv_id', '=', 'a.deliv_id')
-                                         ->on('c.deliv_id', '=', 'b.deliv_id')
-                                         ->on('c.deliv_seq', '=', 'b.deliv_seq');
+                                         ->on('b.deliv_seq', '=', 'a.deliv_seq');
                                 })
                                 ->join('prod_spec as d', 'd.prod_code', '=', 'b.prod_code', 'left outer')
                                 ->join('category as e', 'e.category_id', '=', 'd.category_id', 'left outer')
                                 ->whereRaw($sqlWhere)
-                                ->orderBy('a.dt_trx', 'desc')
+                                ->orderBy('a.dt_modified', 'desc')
                                 ->get();
                                 
         return response($RawMatsResult, 200);
