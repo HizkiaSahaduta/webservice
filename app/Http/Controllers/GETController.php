@@ -796,13 +796,14 @@ class GETController extends Controller
 
         $RawMatsResult = DB::connection('sqlsrv4')
                                 ->table('deliv_unit as a')
-                                ->select('a.deliv_id','a.dt_modified', 'a.coil_id', 'a.wgt', 'd.unit_meas', 'd.descr as nama_produk', 'e.descr as category')
+                                ->select('a.deliv_id','a.dt_modified', 'a.coil_id', 'a.wgt', 'd.unit_meas', 'd.descr as nama_produk', 'e.descr as category', 'f.brand_name as brand_coat_name')
                                 ->leftJoin('deliv_item as b', function($join){
                                     $join->on('b.deliv_id', '=', 'a.deliv_id')
                                          ->on('b.deliv_seq', '=', 'a.deliv_seq');
                                 })
                                 ->join('prod_spec as d', 'd.prod_code', '=', 'b.prod_code', 'left outer')
                                 ->join('category as e', 'e.category_id', '=', 'd.category_id', 'left outer')
+                                ->join('brand_coat as f', 'f.coat_mass', '=', 'd.coat_mass', 'left outer')
                                 ->whereRaw($sqlWhere)
                                 ->orderBy('a.dt_modified', 'desc')
                                 ->get();
