@@ -796,7 +796,7 @@ class GETController extends Controller
 
         $RawMatsResult = DB::connection('sqlsrv4')
                                 ->table('deliv_unit as a')
-                                ->select('a.deliv_id','a.dt_modified', 'a.coil_id', 'a.wgt', 'd.unit_meas', 'd.descr as nama_produk', 'e.descr as category', 'f.brand_name as brand_coat_name')
+                                ->select('a.deliv_id','a.dt_modified', 'a.coil_id', 'a.wgt', 'd.unit_meas', 'd.descr as nama_produk', 'e.descr as category', 'f.brand_name as brand_coat_name', 'h.cust_name')
                                 ->leftJoin('deliv_item as b', function($join){
                                     $join->on('b.deliv_id', '=', 'a.deliv_id')
                                          ->on('b.deliv_seq', '=', 'a.deliv_seq');
@@ -804,6 +804,14 @@ class GETController extends Controller
                                 ->join('prod_spec as d', 'd.prod_code', '=', 'b.prod_code', 'left outer')
                                 ->join('category as e', 'e.category_id', '=', 'd.category_id', 'left outer')
                                 ->join('brand_coat as f', 'f.coat_mass', '=', 'd.coat_mass', 'left outer')
+                                ->leftJoin('deliv_hdr as g', function($join){
+                                    $join->on('g.deliv_id', '=', 'a.deliv_id')
+                                         ->on('g.mill_id', '=', 'a.mill_id');
+                                })
+                                ->leftJoin('customer as h', function($join){
+                                    $join->on('h.cust_id', '=', 'g.cust_id')
+                                         ->on('h.mill_id', '=', 'g.mill_id');
+                                })
                                 ->whereRaw($sqlWhere)
                                 ->orderBy('a.dt_modified', 'desc')
                                 ->get();
