@@ -31,6 +31,8 @@ Route::group(['middleware' => ['cors', 'json.response']], function () {
     Route::middleware('auth:api')->group(function () {
         Route::get('/getListEntity', 'GETController@listEntity')->middleware('api.admin')->name('getListEntity');
         Route::post('/getListProduk', 'GETController@getListProduk')->middleware('api.admin')->name('getListProduk');
+        Route::get('/getCoilID', 'GETController@getCoilID')->middleware('api.admin')->name('getCoilID');
+
     });
 });
 
