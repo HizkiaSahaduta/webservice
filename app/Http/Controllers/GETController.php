@@ -823,4 +823,23 @@ class GETController extends Controller
         return response($RawMatsResult, 200);
         
     }
+
+    public function getCoilID(Request $request)
+    {
+        $sqlWhere = "1=1";
+
+        if($request->coil_id != null)
+        {
+            $coil_id = $request->coil_id;
+        }
+        else
+        {
+            $coil_id = '';
+        }
+
+        $RawMatsResult = DB::connection('sqlsrv5')
+                                ->select(DB::raw("select top 1 * from view_waranty where coil_id = '$coil_id'"));
+                                
+        return response($RawMatsResult, 200);
+    }
 }
