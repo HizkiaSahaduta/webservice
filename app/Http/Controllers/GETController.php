@@ -837,7 +837,7 @@ class GETController extends Controller
             $coil_id = '';
         }
 
-        $RawMatsResult = DB::connection('sqlsrv5')
+        $RawMatsResult = DB::connection('sqlsrv4')
                                 ->select(DB::raw("select top 1 * from view_waranty where coil_id = '$coil_id'"));
                                 
         return response($RawMatsResult, 200);
