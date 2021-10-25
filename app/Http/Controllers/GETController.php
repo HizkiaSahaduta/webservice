@@ -85,7 +85,7 @@ class GETController extends Controller
                     cast(a.amt_subtotal as float) as amt_subtotal,
                     cast(a.amt_ppn as float) as amt_ppn,
                     cast(a.amt_net as float) as amt_net,
-                    LTRIM(RTRIM(a.sp_id)) as sp_id,
+                    LTRIM(RTRIM(a.sp_id)) as sp_id
                     from po_hdr a
                     inner join po_item b on a.office_id=b.office_id and a.po_id=b.po_id 
                     inner join article c on b.article_id=c.article_id ".$where));
