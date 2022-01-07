@@ -353,8 +353,40 @@ class GETController extends Controller
         $inv_last_year_total_inv = 0;
         $inv_last_year_amt_paid = 0;
         $inv_last_year_total_piutang = 0; 
+        $total_credit_limit = 0; 
+        $total_giro = 0; 
+        $jml_ppp = 0;
+        $total_ppp = 0;
 
         try{
+
+            $credits = DB::connection("sqlsrv4")
+                    ->select(DB::raw("select amt_credit_limit from customer where cust_id = '$txtCustID'"));
+
+            foreach ($credits as $credit) {
+
+                $total_credit_limit = "IDR. ".number_format($credit->amt_credit_limit,2,",",".");
+
+            }
+
+            $giros = DB::connection("sqlsrv4")
+                    ->select(DB::raw("SELECT sum(giro_amt - used_amt) as giro_amt FROM giro_rcv WHERE cust_id = '$txtCustID' AND stat <> 'C'"));
+
+            foreach ($giros as $giro) {
+
+                $total_giro = "IDR. ".number_format($giro->giro_amt,2,",",".");
+
+            }
+
+            $ppps = DB::connection("sqlsrv4")
+                    ->select(DB::raw("
+                        select count(lpm_id) as jlm_ppp, sum(total_price) as total from view_out_ppplpm where cust_id = '$txtCustID' and aprv_flag <> 'Y' and stat = 'O'
+                    "));
+
+            foreach ($ppps as $ppp) {
+                $jml_ppp = number_format($ppp->jlm_ppp,0,",",".");
+                $total_ppp = "IDR. ".number_format($ppp->total,0,",",".");
+            }
 
             $cust_grp_id_tmp = DB::connection("sqlsrv4")
                                 ->table('customer')
@@ -455,7 +487,12 @@ class GETController extends Controller
                     'inv_last_year_amt_total' => $inv_last_year_amt_total,
                     'inv_last_year_amt_paid' => $inv_last_year_amt_paid,
                     'inv_last_year_total_piutang' => $inv_last_year_total_piutang,
-                    'list_prod_last_year' => $r5];
+                    'list_prod_last_year' => $r5,
+                    'total_credit_limit' => $total_credit_limit,
+                    'total_giro' => $total_giro,
+                    'jml_ppp' => $jml_ppp,
+                    'total_ppp' => $total_ppp
+                ];
 
             return response($data, 200);
         
@@ -489,40 +526,8 @@ class GETController extends Controller
         $inv_last_year_total_inv = 0;
         $inv_last_year_amt_paid = 0;
         $inv_last_year_total_piutang = 0; 
-        $total_credit_limit = 0; 
-        $total_giro = 0; 
-        $jml_ppp = 0;
-        $total_ppp = 0;
 
         try{
-
-            $credits = DB::connection("sqlsrv4")
-                    ->select(DB::raw("select amt_credit_limit from customer where cust_id = '$txtCustID'"));
-
-            foreach ($credits as $credit) {
-
-                $total_credit_limit = "IDR. ".number_format($credit->amt_credit_limit,2,",",".");
-
-            }
-
-            $giros = DB::connection("sqlsrv4")
-                    ->select(DB::raw("SELECT sum(giro_amt - used_amt) as giro_amt FROM giro_rcv WHERE cust_id = '$txtCustID' AND stat <> 'C'"));
-
-            foreach ($giros as $giro) {
-
-                $total_giro = "IDR. ".number_format($giro->giro_amt,2,",",".");
-
-            }
-
-            $ppps = DB::connection("sqlsrv4")
-                    ->select(DB::raw("
-                        select count(lpm_id) as jlm_ppp, sum(total_price) as total from view_out_ppplpm where cust_id = '$txtCustID' and aprv_flag <> 'Y' and stat = 'O'
-                    "));
-
-            foreach ($ppps as $ppp) {
-                $jml_ppp = number_format($ppp->jlm_ppp,0,",",".");
-                $total_ppp = "IDR. ".number_format($ppp->total,0,",",".");
-            }
 
             $r1 = DB::connection("sqlsrv4")
                     ->select(DB::raw("SELECT b.cust_id, count(a.order_id) as jml_order, 
@@ -607,11 +612,7 @@ class GETController extends Controller
                     'inv_last_year_amt_total' => $inv_last_year_amt_total,
                     'inv_last_year_amt_paid' => $inv_last_year_amt_paid,
                     'inv_last_year_total_piutang' => $inv_last_year_total_piutang,
-                    'list_prod_last_year' => $r5,
-                    'total_credit_limit' => $total_credit_limit,
-                    'total_giro' => $total_giro,
-                    'jml_ppp' => $jml_ppp,
-                    'total_ppp' => $total_ppp
+                    'list_prod_last_year' => $r5                    
             ];
 
             return response($data, 200);
