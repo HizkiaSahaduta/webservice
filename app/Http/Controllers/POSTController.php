@@ -575,4 +575,160 @@ class POSTController extends Controller
 
 
     }
+	
+	public function getOrderTracking(Request $request) {
+		
+		$sqlWhere = "1=1 ";
+        //$txtCustomer = $request->txtCustomer;
+		
+		if($request->txtCustomer != null)
+        {
+            $txtCustomer = $request->txtCustomer;
+        }
+        else
+        {
+            $txtCustomer = '';
+        }
+		
+		if($request->txtSales != null)
+        {
+            $txtSales = $request->txtSales;
+        }
+        else
+        {
+            $txtSales = '';
+        }
+        
+        if($request->txtNoSC != null)
+        {
+            $txtNoSC = $request->txtNoSC;
+        }
+        else
+        {
+            $txtNoSC = '';
+        }
+
+        if($request->startDate != null || $request->startDate = '' )
+        {
+            $startDate = $request->startDate;
+        }
+        else
+        {
+            $startDate = '';
+        }
+
+        if($request->endDate != null || $request->endDate = '' )
+        {
+            $endDate = $request->endDate;
+        }
+        else
+        {
+            $endDate = '';
+        }
+		
+		if($request->txtOutstanding != null)
+        {
+            $txtOutstanding = $request->txtOutstanding;
+        }
+        else
+        {
+            $txtOutstanding = '';
+        }
+
+		if (!empty($txtCustomer))
+        {
+            $sqlWhere =  $sqlWhere . "and cust_id = TRIM('$txtCustomer') ";
+        }
+		
+		if (!empty($txtSales))
+        {
+            $sqlWhere =  $sqlWhere . "and salesman_id = TRIM('$txtSales') ";
+        }
+
+        if (!empty($txtNoSC))
+        {
+            $sqlWhere =  $sqlWhere . "and order_id = TRIM('$txtNoSC') ";
+        }
+
+        if (!empty($startDate))
+        {
+            if (!empty($endDate))
+            {
+                $sqlWhere = $sqlWhere . "and dt_order >= TRIM('$startDate') and dt_order <= TRIM('$endDate') ";
+            }
+            else
+            {
+                //$sqlWhere = $sqlWhere . "and dt_order = '" .$startDate. "'";
+				//$sqlWhere = $sqlWhere . "and dt_order >= TRIM('$startDate') and dt_order <= getDate() ";
+				$sqlWhere = $sqlWhere . "and dt_order between TRIM('$startDate') and format(getDate(), 'yyyyMMdd') ";
+            }
+        }
+
+		switch ($txtOutstanding) {
+		  case "A":
+			$sqlWhere = $sqlWhere . "and dt_awal IS NULL and dt_akhir IS NULL ";
+			break;
+		  case "B":
+			$sqlWhere = $sqlWhere . "and lpm_id = '' and aprv_ppp = '' ";
+			break;
+		  case "C":
+			$sqlWhere = $sqlWhere . "and wgt_sisa > 0 ";
+			break;
+		case "D":
+			$sqlWhere = $sqlWhere . "and deliv_id <> '' ";
+			break;
+		case "E":
+			$sqlWhere = $sqlWhere . "and aprv_ppp = 'Y' ";
+			break;
+		case "F":
+			$sqlWhere = $sqlWhere . "and lpm_id <> '' and aprv_ppp <> 'Y' ";
+			break;
+		  default:
+			
+			$sqlWhere = $sqlWhere;
+			
+		}
+
+        $result = DB::connection('sqlsrv4')
+                    ->table("tracking_order")
+                    ->selectRaw("cust_name as customer,
+                    FORMAT(dt_order, 'dd/MM/yyyy') as tglSC,
+                    item_num as itemNum,
+                    descr,
+                    FORMAT(wgt_ord, 'N0') as wgtOrder,
+                    book_id as sku_id,
+					order_id as NoSC,
+                    FORMAT(tr_date, 'dd/MM/yyyy') as tgl_sku,
+					CASE WHEN FORMAT(dt_awal, 'dd-MM-yyyy') IS NULL
+					  THEN 'N/A'
+					  ELSE CONCAT(FORMAT(dt_awal, 'dd/MM/yyyy'),' - ', FORMAT(dt_akhir, 'dd/MM/yyyy'))
+					END as schedule,
+					CASE WHEN lpm_id = ''
+					  THEN 'N/A'
+					  ELSE lpm_id
+					END as ppp_id,
+					CASE WHEN FORMAT(dt_trx, 'dd-MM-yyyy') = '01-01-1900'
+					  THEN 'N/A'
+					  ELSE FORMAT(dt_trx, 'dd/MM/yyyy')
+					END as tgl_ppp,
+                    FORMAT(wgt_lpm, 'N0') as wgt_lpm,
+					CASE WHEN deliv_id = ''
+					  THEN 'N/A'
+					  ELSE deliv_id
+					END as noDeliv,
+					CASE WHEN FORMAT(dt_deliv, 'dd-MM-yyyy') = '01-01-1900'
+					  THEN 'N/A'
+					  ELSE FORMAT(dt_deliv, 'dd/MM/yyyy')
+					END as dtDeliv,
+                    FORMAT(wgt_deliv, 'N0') as wgtDeliv")
+                    ->whereRaw($sqlWhere)
+					->orderBy('tr_date', 'ASC')
+					->orderBy('item_num', 'ASC')
+					->take(1000)
+                    ->get();
+
+		return response($result);
+		
+	}
+	
 }
