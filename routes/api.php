@@ -51,8 +51,6 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/getOutstandingDeliv', 'GETController@getOutstandingDeliv')->middleware('api.admin')->name('getOutstandingDeliv');
 
 
-
-
     // POST Request
     Route::post('/setApprove', 'POSTController@setApprove')->middleware('api.admin')->name('setApprove');
     Route::post('/setReject', 'POSTController@setReject')->middleware('api.admin')->name('setReject');
@@ -60,6 +58,7 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/setDelivConfirm', 'POSTController@setDelivConfirm')->middleware('api.admin')->name('setDelivConfirm');
     Route::post('/submitApproval', 'POSTController@submitApproval')->middleware('api.admin')->name('submitApproval');
     Route::post('/getListOrder', 'POSTController@getListOrder')->middleware('api.admin')->name('getListOrder');
+	Route::post('/getOrderTracking', 'POSTController@getOrderTracking')->middleware('api.admin')->name('getOrderTracking');
     
     
 });
