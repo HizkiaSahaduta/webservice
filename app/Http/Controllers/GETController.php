@@ -359,6 +359,8 @@ class GETController extends Controller
         $total_ppp = 0;
         $jml_sc = 0;
         $total_sc = 0;
+        $jml_quote = 0;
+        $total_quote = 0;
 
         try{
 
@@ -398,6 +400,16 @@ class GETController extends Controller
             foreach ($scs as $sc) {
                 $jml_sc = number_format($sc->jml_sc,0,",",".");
                 $total_sc = "IDR. ".number_format($sc->total,0,",",".");
+            }
+
+            $quotes = DB::connection("sqlsrv4")
+                        ->select(DB::raw("
+                        select count(quote_id) as jml_quote, sum(amt_total) as total_quote from view_quote_open where cust_id = 'C347'
+                        "));
+
+            foreach ($quotes as $quote) {
+                $jml_quote = number_format($sc->jml_quote,0,",",".");
+                $total_quote = "IDR. ".number_format($sc->total_quote,0,",",".");
             }
 
             $cust_grp_id_tmp = DB::connection("sqlsrv4")
@@ -505,7 +517,9 @@ class GETController extends Controller
                     'jml_ppp' => $jml_ppp,
                     'total_ppp' => $total_ppp,
                     'jml_sc' => $jml_sc,
-                    'total_sc' => $total_sc
+                    'total_sc' => $total_sc,
+                    'jml_quote' => $jml_quote,
+                    'total_quote' => $total_quote
                 ];
 
             return response($data, 200);
