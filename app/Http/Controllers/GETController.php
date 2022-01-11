@@ -357,6 +357,8 @@ class GETController extends Controller
         $total_giro = 0; 
         $jml_ppp = 0;
         $total_ppp = 0;
+        $jml_sc = 0;
+        $total_sc = 0;
 
         try{
 
@@ -386,6 +388,16 @@ class GETController extends Controller
             foreach ($ppps as $ppp) {
                 $jml_ppp = number_format($ppp->jlm_ppp,0,",",".");
                 $total_ppp = "IDR. ".number_format($ppp->total,0,",",".");
+            }
+
+            $scs = DB::connection("sqlsrv4")
+                        ->select(DB::raw("
+                        select count(order_id) as jml_sc, sum(amt_total) as total from order_mast where cust_id = '$txtCustID' and stat <> 'C'
+                        "));
+
+            foreach ($scs as $sc) {
+                $jml_sc = number_format($sc->jml_sc,0,",",".");
+                $total_sc = "IDR. ".number_format($sc->total,0,",",".");
             }
 
             $cust_grp_id_tmp = DB::connection("sqlsrv4")
@@ -491,7 +503,9 @@ class GETController extends Controller
                     'total_credit_limit' => $total_credit_limit,
                     'total_giro' => $total_giro,
                     'jml_ppp' => $jml_ppp,
-                    'total_ppp' => $total_ppp
+                    'total_ppp' => $total_ppp,
+                    'jml_sc' => $jml_sc,
+                    'total_sc' => $total_sc
                 ];
 
             return response($data, 200);
