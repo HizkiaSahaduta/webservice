@@ -408,8 +408,8 @@ class GETController extends Controller
                         "));
 
             foreach ($quotes as $quote) {
-                $jml_quote = number_format($sc->jml_quote,0,",",".");
-                $total_quote = "IDR. ".number_format($sc->total_quote,0,",",".");
+                $jml_quote = number_format($quote->jml_quote,0,",",".");
+                $total_quote = "IDR. ".number_format($quote->total_quote,0,",",".");
             }
 
             $cust_grp_id_tmp = DB::connection("sqlsrv4")
