@@ -452,7 +452,7 @@ class GETController extends Controller
             foreach ($r2 as $r2) {
 
                 $inv_kurang_bayar_inv = number_format($r2->total_invoice,0,",",".")." Inv";
-                $inv_kurang_bayar_piutang = "IDR. ".number_format($r2->total_piutang/1000000,2,",",".");
+                $inv_kurang_bayar_piutang = "IDR - Million. ".number_format($r2->total_piutang/1000000,2,",",".");
 
             }
 
@@ -469,7 +469,7 @@ class GETController extends Controller
 
                 $siap_kirim_lpm = number_format($r3->jml_lpm,0,",",".")." LPM";
                 $siap_kirim_wgt = number_format($r3->wgt_lpm/1000,2,",",".")." TON";
-                $siap_kirim_idr = "IDR. ".number_format($r3->total/1000000,2,",",".");
+                $siap_kirim_idr = "IDR - Million. ".number_format($r3->total/1000000,2,",",".");
 
             }
 
@@ -484,9 +484,9 @@ class GETController extends Controller
 
 
                 $inv_last_year_total_inv = number_format($r4->total_inv,0,",",".")." Inv";
-                $inv_last_year_amt_total = "IDR. ".number_format($r4->amt_total/1000000,2,",",".");
-                $inv_last_year_amt_paid = "IDR. ".number_format($r4->amt_paid/1000000,2,",",".");
-                $inv_last_year_total_piutang = "IDR. ".number_format($r4->total_piutang/1000000,2,",",".");
+                $inv_last_year_amt_total = "IDR - Million. ".number_format($r4->amt_total/1000000,2,",",".");
+                $inv_last_year_amt_paid = "IDR - Million. ".number_format($r4->amt_paid/1000000,2,",",".");
+                $inv_last_year_total_piutang = "IDR - Million. ".number_format($r4->total_piutang/1000000,2,",",".");
 
             }
 
