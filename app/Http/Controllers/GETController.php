@@ -404,7 +404,7 @@ class GETController extends Controller
 
             $quotes = DB::connection("sqlsrv4")
                         ->select(DB::raw("
-                        select count(quote_id) as jml_quote, sum(amt_total) as total_quote from view_quote_open where cust_id = 'C347'
+                        select count(quote_id) as jml_quote, sum(amt_total) as total_quote from view_quote_open where cust_id = '$txtCustID'
                         "));
 
             foreach ($quotes as $quote) {
