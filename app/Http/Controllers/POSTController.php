@@ -356,80 +356,80 @@ class POSTController extends Controller
 
         if(!$skuAll && !$scAll && !$skuOpen && !$skuPosted && !$skuQuot && !$skuConfirm && !$skuClosed && !$skuReject && !$scOpen && !$scClosed && !$scReject) {
 
-            $where .= " and a.sc_stat not in ('C', 'X')";
+            $where .= " and b.sc_stat not in ('C', 'X')";
         }
 
         if ($skuAll) {
 
-            $where .= " and a.last_stat in ('O', 'P', 'R', 'S', 'C', 'X')";
+            $where .= " and b.last_stat in ('O', 'P', 'R', 'S', 'C', 'X')";
 
         }
 
         if ($skuOpen) {
 
-            $where .= " and a.last_stat = 'O'";
+            $where .= " and b.last_stat = 'O'";
 
         }
 
         if ($skuPosted) {
 
-            $where .= " and a.last_stat = 'P'";
+            $where .= " and b.last_stat = 'P'";
 
         }
 
         if ($skuQuot) {
 
-            $where .= " and a.last_stat = 'R'";
+            $where .= " and b.last_stat = 'R'";
 
         }
 
         if ($skuConfirm) {
 
-            $where .= " and a.last_stat = 'S'";
+            $where .= " and b.last_stat = 'S'";
 
         }
 
         if ($skuClosed) {
 
-            $where .= " and a.last_stat = 'C'";
+            $where .= " and b.last_stat = 'C'";
 
         }
 
         if ($skuReject) {
 
-            $where .= " and a.last_stat = 'X'";
+            $where .= " and b.last_stat = 'X'";
 
         }
 
         if ($scAll) {
 
-            $where .= " and a.sc_stat in ('O', 'R', 'C', 'X', 'N/A')";
+            $where .= " and b.sc_stat in ('O', 'R', 'C', 'X', 'N/A')";
 
         }
 
         if ($scOpen) {
 
-            $where .= " and a.sc_stat in ('O', 'R')";
+            $where .= " and b.sc_stat in ('O', 'R')";
 
         }
 
         if ($scClosed) {
 
-            $where .= " and a.sc_stat = 'C'";
+            $where .= " and b.sc_stat = 'C'";
 
         }
 
         if ($scReject) {
 
-            $where .= " and a.sc_stat = 'X'";
+            $where .= " and b.sc_stat = 'X'";
 
         }
 
-        if ($searchkey) {
+        // if ($searchkey) {
 
-            $where .= " and c.ord_desc like '%$searchkey%'";
+        //     $where .= " and c.ord_desc like '%$searchkey%'";
 
-        }
+        // }
 
         if ($groupid == 'SALES') {
 
@@ -457,15 +457,19 @@ class POSTController extends Controller
 
                 $data = DB::connection("sqlsrv4")
                 ->select(DB::raw("
-                    SELECT a.*, b.salesman_name,
-                    case
-                        when b.stat is null then 'N/A'
-                        else b.stat
-                    end as sc_stat
-                    from OPENQUERY([MYSQL], 'SELECT * FROM order_book_hdr order by tr_date desc LIMIT 100') a 
-                    left join view_sc_preorder b on a.order_id = b.order_id
-                    $where and a.salesman_id = '$salesid'
-                    order by a.tr_date desc"));
+                select a.stat, b.stat as last_stat, case when b.stat is null then 'N/A'
+                else b.stat end as sc_stat, a.book_id,
+                convert(varchar(10), a.tr_date, 120) as tr_date,
+                convert(varchar(10), b.dt_order, 120) as dt_order, 
+                ltrim(rtrim(a.order_id)) as order_id,
+                ltrim(rtrim(a.cust_id)) as cust_id , ltrim(rtrim(a.cust_name)) as cust_name, b.day_change,
+                ltrim(rtrim(b.mpf_id)) as mpf_id, convert(varchar(10), b.dt_close, 120) as dt_close, b.after_close, b.ppp,
+                a.user_id, a.image, a.salesman_id, c.salesman_name 
+                from OPENQUERY([MYSQL], 'SELECT * FROM order_book_hdr order by tr_date desc LIMIT 100') a
+                left outer join view_sc_preorder b on a.order_id = b.order_id 
+                left outer join salesman c on a.salesman_id = c.salesman_id
+                $where and a.salesman_id = '$salesid' order by a.tr_date desc
+                "));
 
                   
                 return response($data, 200);
