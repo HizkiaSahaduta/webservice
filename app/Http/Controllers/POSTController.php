@@ -356,72 +356,72 @@ class POSTController extends Controller
 
         if(!$skuAll && !$scAll && !$skuOpen && !$skuPosted && !$skuQuot && !$skuConfirm && !$skuClosed && !$skuReject && !$scOpen && !$scClosed && !$scReject) {
 
-            $where .= " and b.stat not in ('C', 'X')";
+            // $where .= " and a.stat not in ('C', 'X')";
         }
 
         if ($skuAll) {
 
-            $where .= " and b.stat in ('O', 'P', 'R', 'S', 'C', 'X')";
+            $where .= " and a.stat in ('O', 'P', 'R', 'Sa, 'C', 'X')";
 
         }
 
         if ($skuOpen) {
 
-            $where .= " and b.stat = 'O'";
+            $where .= " and a.stat = 'O'";
 
         }
 
         if ($skuPosted) {
 
-            $where .= " and b.stat = 'P'";
+            $where .= " and a.stat = 'P'";
 
         }
 
         if ($skuQuot) {
 
-            $where .= " and b.stat = 'R'";
+            $where .= " and a.stat = 'R'";
 
         }
 
         if ($skuConfirm) {
 
-            $where .= " and b.stat = 'S'";
+            $where .= " and a.stat = 'S'";
 
         }
 
         if ($skuClosed) {
 
-            $where .= " and b.stat = 'C'";
+            $where .= " and a.stat = 'C'";
 
         }
 
         if ($skuReject) {
 
-            $where .= " and b.stat = 'X'";
+            $where .= " and a.stat = 'X'";
 
         }
 
         if ($scAll) {
 
-            $where .= " and b.stat in ('O', 'R', 'C', 'X', 'N/A')";
+            $where .= " and a.stat in ('O', 'R', 'C',a'X', 'N/A')";
 
         }
 
         if ($scOpen) {
 
-            $where .= " and b.stat in ('O', 'R')";
+            $where .= " and a.stat ia ('O', 'R')";
 
         }
 
         if ($scClosed) {
 
-            $where .= " and b.stat = 'C'";
+            $where .= " and a.stat = 'C'";
 
         }
 
         if ($scReject) {
 
-            $where .= " and b.stat = 'X'";
+            $where .= " and a.stat = 'X'";
 
         }
 
@@ -457,17 +457,23 @@ class POSTController extends Controller
 
                 $data = DB::connection("sqlsrv4")
                 ->select(DB::raw("
-                select a.stat, a.stat as last_stat, case when b.stat is null then 'N/A'
-                else b.stat end as sc_stat, a.book_id,
-                convert(varchar(10), a.tr_date, 120) as tr_date,
-                convert(varchar(10), b.dt_order, 120) as dt_order, 
-                ltrim(rtrim(a.order_id)) as order_id,
-                ltrim(rtrim(a.cust_id)) as cust_id , ltrim(rtrim(a.cust_name)) as cust_name, b.day_change,
-                ltrim(rtrim(b.mpf_id)) as mpf_id, convert(varchar(10), b.dt_close, 120) as dt_close, b.after_close, b.ppp,
-                a.user_id, a.image, a.salesman_id, c.salesman_name 
-                from order_book_hdr a
-                left outer join view_sc_preorder b on a.order_id = b.order_id 
-                left outer join salesman c on a.salesman_id = c.salesman_id
+                select distinct a.*, b.salesman_name from (
+                select b.stat as last_stat, 
+                case
+                    when a.stat is null then 'N/A'
+                        else a.stat
+                end as sc_stat, b.book_id,
+                convert(varchar(10), b.tr_date, 120) as tr_date, 
+                convert(varchar(10), a.dt_order, 120) as dt_order, 
+                ltrim(rtrim(b.order_id)) as order_id, 
+                ltrim(rtrim(b.cust_id)) as cust_id , ltrim(rtrim(b.cust_name)) as cust_name, a.day_change,
+                ltrim(rtrim(a.mpf_id)) as mpf_id, convert(varchar(10), a.dt_close, 120) as dt_close, a.after_close, a.ppp,
+                b.user_id, b.image, b.salesman_id
+                from 
+                view_sc_preorder a 
+                right join OPENQUERY([MYSQL], 'SELECT  cust_id, tr_date, book_id, quote_id, stat, order_id, cust_name, user_id, image, salesman_id  FROM order_book_hdr') b on a.order_id = b.order_id) a
+                left join salesman b on a.salesman_id = b.salesman_id
+                inner join OPENQUERY([MYSQL], 'SELECT book_id FROM order_book_dtl') c on a.book_id = c.book_id
                 $where and a.salesman_id = '$salesid' order by a.tr_date desc
                 "));
 
@@ -523,17 +529,23 @@ class POSTController extends Controller
 
                 $data = DB::connection("sqlsrv4")
                 ->select(DB::raw("
-                select a.stat, a.stat as last_stat, case when b.stat is null then 'N/A'
-                else b.stat end as sc_stat, a.book_id,
-                convert(varchar(10), a.tr_date, 120) as tr_date,
-                convert(varchar(10), b.dt_order, 120) as dt_order, 
-                ltrim(rtrim(a.order_id)) as order_id,
-                ltrim(rtrim(a.cust_id)) as cust_id , ltrim(rtrim(a.cust_name)) as cust_name, b.day_change,
-                ltrim(rtrim(b.mpf_id)) as mpf_id, convert(varchar(10), b.dt_close, 120) as dt_close, b.after_close, b.ppp,
-                a.user_id, a.image, a.salesman_id, c.salesman_name 
-                from order_book_hdr a
-                left outer join view_sc_preorder b on a.order_id = b.order_id 
-                left outer join salesman c on a.salesman_id = c.salesman_id
+                select distinct a.*, b.salesman_name from (
+                select b.stat as last_stat, 
+                case
+                    when a.stat is null then 'N/A'
+                        else a.stat
+                end as sc_stat, b.book_id,
+                convert(varchar(10), b.tr_date, 120) as tr_date, 
+                convert(varchar(10), a.dt_order, 120) as dt_order, 
+                ltrim(rtrim(b.order_id)) as order_id, 
+                ltrim(rtrim(b.cust_id)) as cust_id , ltrim(rtrim(b.cust_name)) as cust_name, a.day_change,
+                ltrim(rtrim(a.mpf_id)) as mpf_id, convert(varchar(10), a.dt_close, 120) as dt_close, a.after_close, a.ppp,
+                b.user_id, b.image, b.salesman_id
+                from 
+                view_sc_preorder a 
+                right join OPENQUERY([MYSQL], 'SELECT  cust_id, tr_date, book_id, quote_id, stat, order_id, cust_name, user_id, image, salesman_id  FROM order_book_hdr') b on a.order_id = b.order_id) a
+                left join salesman b on a.salesman_id = b.salesman_id
+                inner join OPENQUERY([MYSQL], 'SELECT book_id FROM order_book_dtl') c on a.book_id = c.book_id
                 $where and a.cust_id = '$custid' order by a.tr_date desc
                 "));
 
@@ -553,17 +565,23 @@ class POSTController extends Controller
             try{
                 $data = DB::connection("sqlsrv4")
                 ->select(DB::raw("
-                select a.stat, a.stat as last_stat, case when b.stat is null then 'N/A'
-                else b.stat end as sc_stat, a.book_id,
-                convert(varchar(10), a.tr_date, 120) as tr_date,
-                convert(varchar(10), b.dt_order, 120) as dt_order, 
-                ltrim(rtrim(a.order_id)) as order_id,
-                ltrim(rtrim(a.cust_id)) as cust_id , ltrim(rtrim(a.cust_name)) as cust_name, b.day_change,
-                ltrim(rtrim(b.mpf_id)) as mpf_id, convert(varchar(10), b.dt_close, 120) as dt_close, b.after_close, b.ppp,
-                a.user_id, a.image, a.salesman_id, c.salesman_name 
-                from order_book_hdr a
-                left outer join view_sc_preorder b on a.order_id = b.order_id 
-                left outer join salesman c on a.salesman_id = c.salesman_id
+                select distinct a.*, b.salesman_name from (
+                select b.stat as last_stat, 
+                case
+                    when a.stat is null then 'N/A'
+                        else a.stat
+                end as sc_stat, b.book_id,
+                convert(varchar(10), b.tr_date, 120) as tr_date, 
+                convert(varchar(10), a.dt_order, 120) as dt_order, 
+                ltrim(rtrim(b.order_id)) as order_id, 
+                ltrim(rtrim(b.cust_id)) as cust_id , ltrim(rtrim(b.cust_name)) as cust_name, a.day_change,
+                ltrim(rtrim(a.mpf_id)) as mpf_id, convert(varchar(10), a.dt_close, 120) as dt_close, a.after_close, a.ppp,
+                b.user_id, b.image, b.salesman_id
+                from 
+                view_sc_preorder a 
+                right join OPENQUERY([MYSQL], 'SELECT  cust_id, tr_date, book_id, quote_id, stat, order_id, cust_name, user_id, image, salesman_id  FROM order_book_hdr') b on a.order_id = b.order_id) a
+                left join salesman b on a.salesman_id = b.salesman_id
+                inner join OPENQUERY([MYSQL], 'SELECT book_id FROM order_book_dtl') c on a.book_id = c.book_id
                 $where order by a.tr_date desc
                 "));
                   
