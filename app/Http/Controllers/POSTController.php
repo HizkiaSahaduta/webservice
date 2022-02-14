@@ -361,43 +361,43 @@ class POSTController extends Controller
 
         if ($skuAll) {
 
-            $where .= " and b.last_stat in ('O', 'P', 'R', 'S', 'C', 'X')";
+            $where .= " and b.stat in ('O', 'P', 'R', 'S', 'C', 'X')";
 
         }
 
         if ($skuOpen) {
 
-            $where .= " and b.last_stat = 'O'";
+            $where .= " and b.stat = 'O'";
 
         }
 
         if ($skuPosted) {
 
-            $where .= " and b.last_stat = 'P'";
+            $where .= " and b.stat = 'P'";
 
         }
 
         if ($skuQuot) {
 
-            $where .= " and b.last_stat = 'R'";
+            $where .= " and b.stat = 'R'";
 
         }
 
         if ($skuConfirm) {
 
-            $where .= " and b.last_stat = 'S'";
+            $where .= " and b.stat = 'S'";
 
         }
 
         if ($skuClosed) {
 
-            $where .= " and b.last_stat = 'C'";
+            $where .= " and b.stat = 'C'";
 
         }
 
         if ($skuReject) {
 
-            $where .= " and b.last_stat = 'X'";
+            $where .= " and b.stat = 'X'";
 
         }
 
