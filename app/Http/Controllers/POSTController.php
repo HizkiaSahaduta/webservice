@@ -471,8 +471,6 @@ class POSTController extends Controller
                 // $where and a.salesman_id = '$salesid' order by a.tr_date desc
                 // "));
 
-                dd($where);
-
                 $data = DB::connection("sqlsrv4")
                 ->select(DB::raw("
                 select a.stat, a.stat as last_stat, case when b.stat is null then 'N/A'
@@ -490,7 +488,7 @@ class POSTController extends Controller
                 "));
 
                   
-                return response($data, 200);
+                return response($where, 200);
             }
             catch(QueryException $ex){
     
