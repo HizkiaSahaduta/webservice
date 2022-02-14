@@ -482,112 +482,101 @@ class POSTController extends Controller
             }
         }
 
-        // if ($groupid == 'CUSTOMER') {
+        if ($groupid == 'CUSTOMER') {
 
-        //     try{
+            try{
 
 
-        //         // $list_custid = '';
+                // $list_custid = '';
 
-        //         // $salesid = DB::connection("sqlsrv4")
-        //         //             ->table('customer')
-        //         //             ->select('salesman_id')
-        //         //             ->where('cust_id','=', $custid)
-        //         //             ->Value('salesman_id');
+                // $salesid = DB::connection("sqlsrv4")
+                //             ->table('customer')
+                //             ->select('salesman_id')
+                //             ->where('cust_id','=', $custid)
+                //             ->Value('salesman_id');
 
-        //         // $cust_grp_id_tmp = DB::connection("sqlsrv4")
-        //         //             ->table('customer')
-        //         //             ->selectRaw('LTRIM(RTRIM(cust_grp_id)) as cust_grp_id')
-        //         //             ->where('cust_id', '=', $custid)
-        //         //             ->where('active_flag','=', 'Y')
-        //         //             ->groupBy('cust_grp_id')
-        //         //             ->value('cust_grp_id');
+                // $cust_grp_id_tmp = DB::connection("sqlsrv4")
+                //             ->table('customer')
+                //             ->selectRaw('LTRIM(RTRIM(cust_grp_id)) as cust_grp_id')
+                //             ->where('cust_id', '=', $custid)
+                //             ->where('active_flag','=', 'Y')
+                //             ->groupBy('cust_grp_id')
+                //             ->value('cust_grp_id');
 
                 
-        //         // $list_custid_tmp = DB::connection("sqlsrv4")
-        //         //                 ->table('customer')
-        //         //                 ->selectRaw('LTRIM(RTRIM(cust_id)) as cust_id')
-        //         //                 ->where('cust_grp_id', '=', $cust_grp_id_tmp)
-        //         //                 ->where('active_flag','=', 'Y')
-        //         //                 ->get();
+                // $list_custid_tmp = DB::connection("sqlsrv4")
+                //                 ->table('customer')
+                //                 ->selectRaw('LTRIM(RTRIM(cust_id)) as cust_id')
+                //                 ->where('cust_grp_id', '=', $cust_grp_id_tmp)
+                //                 ->where('active_flag','=', 'Y')
+                //                 ->get();
 
 
-        //         // foreach ($list_custid_tmp as $list_custid_tmp) {
+                // foreach ($list_custid_tmp as $list_custid_tmp) {
                     
 
-        //         //     $list_custid .= "'".$list_custid_tmp->cust_id."',";
+                //     $list_custid .= "'".$list_custid_tmp->cust_id."',";
                     
-        //         // }
+                // }
 
-        //         // $list_custid = substr_replace($list_custid, "", -1);
+                // $list_custid = substr_replace($list_custid, "", -1);
 
-        //         $data = DB::connection("sqlsrv4")
-        //         ->select(DB::raw("
-        //         select distinct a.*, b.salesman_name from (
-        //             select b.stat as last_stat, 
-        //             case
-        //                 when a.stat is null then 'N/A'
-        //                 else a.stat
-        //             end as sc_stat, b.book_id,
-        //             convert(varchar(10), b.tr_date, 120) as tr_date, 
-        //             convert(varchar(10), a.dt_order, 120) as dt_order, 
-        //             ltrim(rtrim(b.order_id)) as order_id, 
-        //             ltrim(rtrim(b.cust_id)) as cust_id , ltrim(rtrim(b.cust_name)) as cust_name, a.day_change,
-        //             ltrim(rtrim(a.mpf_id)) as mpf_id, convert(varchar(10), a.dt_close, 120) as dt_close, a.after_close, a.ppp,
-        //             b.user_id, b.image, b.salesman_id
-        //             from 
-        //             view_sc_preorder a 
-        //             right join OPENQUERY([MYSQL], 'SELECT * FROM order_book_hdr') b on a.order_id = b.order_id) a
-        //             left join salesman b on a.salesman_id = b.salesman_id
-        //             inner join OPENQUERY([MYSQL], 'SELECT * FROM order_book_dtl') c on a.book_id = c.book_id
-        //             $where and a.cust_id = '$custid' order by a.tr_date desc"));
+                $data = DB::connection("sqlsrv4")
+                ->select(DB::raw("
+                select a.stat, b.stat as last_stat, case when b.stat is null then 'N/A'
+                else b.stat end as sc_stat, a.book_id,
+                convert(varchar(10), a.tr_date, 120) as tr_date,
+                convert(varchar(10), b.dt_order, 120) as dt_order, 
+                ltrim(rtrim(a.order_id)) as order_id,
+                ltrim(rtrim(a.cust_id)) as cust_id , ltrim(rtrim(a.cust_name)) as cust_name, b.day_change,
+                ltrim(rtrim(b.mpf_id)) as mpf_id, convert(varchar(10), b.dt_close, 120) as dt_close, b.after_close, b.ppp,
+                a.user_id, a.image, a.salesman_id, c.salesman_name 
+                from OPENQUERY([MYSQL], 'SELECT * FROM order_book_hdr order by tr_date desc LIMIT 100') a
+                left outer join view_sc_preorder b on a.order_id = b.order_id 
+                left outer join salesman c on a.salesman_id = c.salesman_id
+                $where and a.cust_id = '$custid' order by a.tr_date desc
+                "));
 
-        //         return response($data, 200);
-        //     }
-        //     catch(QueryException $ex){
+                return response($data, 200);
+            }
+            catch(QueryException $ex){
     
-        //         $error = $ex->getMessage();
-        //         $response = ['message' => $error];
-        //         return response($response, 422);
-        //     }
+                $error = $ex->getMessage();
+                $response = ['message' => $error];
+                return response($response, 422);
+            }
 
-        // }
+        }
 
-        // if ($groupid != 'SALES' || $groupid != 'CUSTOMER') {
+        if ($groupid != 'SALES' || $groupid != 'CUSTOMER') {
 
-        //     try{
-                                
-        //         $data = DB::connection("sqlsrv4")
-        //         ->select(DB::raw("
-        //         select distinct a.*, b.salesman_name from (
-        //             select b.stat as last_stat, 
-        //             case
-        //                 when a.stat is null then 'N/A'
-        //                 else a.stat
-        //             end as sc_stat, b.book_id,
-        //             convert(varchar(10), b.tr_date, 120) as tr_date, 
-        //             convert(varchar(10), a.dt_order, 120) as dt_order, 
-        //             ltrim(rtrim(b.order_id)) as order_id, 
-        //             ltrim(rtrim(b.cust_id)) as cust_id , ltrim(rtrim(b.cust_name)) as cust_name, a.day_change,
-        //             ltrim(rtrim(a.mpf_id)) as mpf_id, convert(varchar(10), a.dt_close, 120) as dt_close, a.after_close, a.ppp,
-        //             b.user_id, b.image, b.salesman_id
-        //             from 
-        //             view_sc_preorder a 
-        //             right join OPENQUERY([MYSQL], 'SELECT * FROM order_book_hdr') b on a.order_id = b.order_id) a
-        //             left join salesman b on a.salesman_id = b.salesman_id
-        //             inner join OPENQUERY([MYSQL], 'SELECT * FROM order_book_dtl') c on a.book_id = c.book_id
-        //             $where order by a.tr_date desc"));
+            try{
+                $data = DB::connection("sqlsrv4")
+                ->select(DB::raw("
+                select a.stat, b.stat as last_stat, case when b.stat is null then 'N/A'
+                else b.stat end as sc_stat, a.book_id,
+                convert(varchar(10), a.tr_date, 120) as tr_date,
+                convert(varchar(10), b.dt_order, 120) as dt_order, 
+                ltrim(rtrim(a.order_id)) as order_id,
+                ltrim(rtrim(a.cust_id)) as cust_id , ltrim(rtrim(a.cust_name)) as cust_name, b.day_change,
+                ltrim(rtrim(b.mpf_id)) as mpf_id, convert(varchar(10), b.dt_close, 120) as dt_close, b.after_close, b.ppp,
+                a.user_id, a.image, a.salesman_id, c.salesman_name 
+                from OPENQUERY([MYSQL], 'SELECT * FROM order_book_hdr order by tr_date desc LIMIT 100') a
+                left outer join view_sc_preorder b on a.order_id = b.order_id 
+                left outer join salesman c on a.salesman_id = c.salesman_id
+                $where order by a.tr_date desc
+                "));
                   
-        //         return response($data, 200);
-        //     }
-        //     catch(QueryException $ex){
+                return response($data, 200);
+            }
+            catch(QueryException $ex){
     
-        //         $error = $ex->getMessage();
-        //         $response = ['message' => $error];
-        //         return response($response, 422);
-        //     }
+                $error = $ex->getMessage();
+                $response = ['message' => $error];
+                return response($response, 422);
+            }
 
-        // }
+        }
 
 
     }
