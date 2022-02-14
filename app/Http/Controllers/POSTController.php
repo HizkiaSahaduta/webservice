@@ -356,72 +356,72 @@ class POSTController extends Controller
 
         if(!$skuAll && !$scAll && !$skuOpen && !$skuPosted && !$skuQuot && !$skuConfirm && !$skuClosed && !$skuReject && !$scOpen && !$scClosed && !$scReject) {
 
-            $where .= " and a.stat not in ('C', 'X')";
+            $where .= " and a.sc_stat not in ('C', 'X')";
         }
 
         if ($skuAll) {
 
-            $where .= " and a.stat in ('O', 'P', 'R', 'Sa, 'C', 'X')";
+            $where .= " and a.last_stat in ('O', 'P', 'R', 'S', 'C', 'X')";
 
         }
 
         if ($skuOpen) {
 
-            $where .= " and a.stat = 'O'";
+            $where .= " and a.last_stat = 'O'";
 
         }
 
         if ($skuPosted) {
 
-            $where .= " and a.stat = 'P'";
+            $where .= " and a.last_stat = 'P'";
 
         }
 
         if ($skuQuot) {
 
-            $where .= " and a.stat = 'R'";
+            $where .= " and a.last_stat = 'R'";
 
         }
 
         if ($skuConfirm) {
 
-            $where .= " and a.stat = 'S'";
+            $where .= " and a.last_stat = 'S'";
 
         }
 
         if ($skuClosed) {
 
-            $where .= " and a.stat = 'C'";
+            $where .= " and a.last_stat = 'C'";
 
         }
 
         if ($skuReject) {
 
-            $where .= " and a.stat = 'X'";
+            $where .= " and a.last_stat = 'X'";
 
         }
 
         if ($scAll) {
 
-            $where .= " and a.stat in ('O', 'R', 'C',a'X', 'N/A')";
+            $where .= " and a.sc_stat in ('O', 'R', 'C', 'X', 'N/A')";
 
         }
 
         if ($scOpen) {
 
-            $where .= " and a.stat ia ('O', 'R')";
+            $where .= " and a.sc_stat in ('O', 'R')";
 
         }
 
         if ($scClosed) {
 
-            $where .= " and a.stat = 'C'";
+            $where .= " and a.sc_stat = 'C'";
 
         }
 
         if ($scReject) {
 
-            $where .= " and a.stat = 'X'";
+            $where .= " and a.sc_stat = 'X'";
 
         }
 
