@@ -356,7 +356,7 @@ class POSTController extends Controller
 
         if(!$skuAll && !$scAll && !$skuOpen && !$skuPosted && !$skuQuot && !$skuConfirm && !$skuClosed && !$skuReject && !$scOpen && !$scClosed && !$scReject) {
 
-            $where .= " and b.sc_stat not in ('C', 'X')";
+            $where .= " and b.stat not in ('C', 'X')";
         }
 
         if ($skuAll) {
@@ -403,25 +403,25 @@ class POSTController extends Controller
 
         if ($scAll) {
 
-            $where .= " and b.sc_stat in ('O', 'R', 'C', 'X', 'N/A')";
+            $where .= " and b.stat in ('O', 'R', 'C', 'X', 'N/A')";
 
         }
 
         if ($scOpen) {
 
-            $where .= " and b.sc_stat in ('O', 'R')";
+            $where .= " and b.stat in ('O', 'R')";
 
         }
 
         if ($scClosed) {
 
-            $where .= " and b.sc_stat = 'C'";
+            $where .= " and b.stat = 'C'";
 
         }
 
         if ($scReject) {
 
-            $where .= " and b.sc_stat = 'X'";
+            $where .= " and b.stat = 'X'";
 
         }
 
