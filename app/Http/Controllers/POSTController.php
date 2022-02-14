@@ -455,21 +455,23 @@ class POSTController extends Controller
                 //     inner join OPENQUERY([MYSQL], 'SELECT * FROM order_book_dtl') c on a.book_id = c.book_id
                 //     $where and a.salesman_id = '$salesid' order by a.tr_date desc"));
 
-                $data = DB::connection("sqlsrv4")
-                ->select(DB::raw("
-                select a.stat, a.stat as last_stat, case when b.stat is null then 'N/A'
-                else b.stat end as sc_stat, a.book_id,
-                convert(varchar(10), a.tr_date, 120) as tr_date,
-                convert(varchar(10), b.dt_order, 120) as dt_order, 
-                ltrim(rtrim(a.order_id)) as order_id,
-                ltrim(rtrim(a.cust_id)) as cust_id , ltrim(rtrim(a.cust_name)) as cust_name, b.day_change,
-                ltrim(rtrim(b.mpf_id)) as mpf_id, convert(varchar(10), b.dt_close, 120) as dt_close, b.after_close, b.ppp,
-                a.user_id, a.image, a.salesman_id, c.salesman_name 
-                from order_book_hdr a
-                left outer join view_sc_preorder b on a.order_id = b.order_id 
-                left outer join salesman c on a.salesman_id = c.salesman_id
-                $where and a.salesman_id = '$salesid' order by a.tr_date desc
-                "));
+                // $data = DB::connection("sqlsrv4")
+                // ->select(DB::raw("
+                // select a.stat, a.stat as last_stat, case when b.stat is null then 'N/A'
+                // else b.stat end as sc_stat, a.book_id,
+                // convert(varchar(10), a.tr_date, 120) as tr_date,
+                // convert(varchar(10), b.dt_order, 120) as dt_order, 
+                // ltrim(rtrim(a.order_id)) as order_id,
+                // ltrim(rtrim(a.cust_id)) as cust_id , ltrim(rtrim(a.cust_name)) as cust_name, b.day_change,
+                // ltrim(rtrim(b.mpf_id)) as mpf_id, convert(varchar(10), b.dt_close, 120) as dt_close, b.after_close, b.ppp,
+                // a.user_id, a.image, a.salesman_id, c.salesman_name 
+                // from order_book_hdr a
+                // left outer join view_sc_preorder b on a.order_id = b.order_id 
+                // left outer join salesman c on a.salesman_id = c.salesman_id
+                // $where and a.salesman_id = '$salesid' order by a.tr_date desc
+                // "));
+
+                dd($where);
 
                 $data = DB::connection("sqlsrv4")
                 ->select(DB::raw("
