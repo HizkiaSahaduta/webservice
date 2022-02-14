@@ -458,7 +458,7 @@ class POSTController extends Controller
                 $data = DB::connection("sqlsrv4")
                 ->select(DB::raw("
                     SELECT a.*, b.stat, b.salesman_name 
-                    from OPENQUERY([MYSQL], 'SELECT * FROM order_book_hdr where salesman_id = '$salesid' order by tr_date desc LIMIT 100') a 
+                    from OPENQUERY([MYSQL], 'SELECT * FROM order_book_hdr order by tr_date desc LIMIT 100') a 
                     left join view_sc_preorder b on a.order_id = b.order_id
                     $where and a.salesman_id = '$salesid'
                     order by a.tr_date desc"));
