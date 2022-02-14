@@ -465,7 +465,7 @@ class POSTController extends Controller
                 ltrim(rtrim(a.cust_id)) as cust_id , ltrim(rtrim(a.cust_name)) as cust_name, b.day_change,
                 ltrim(rtrim(b.mpf_id)) as mpf_id, convert(varchar(10), b.dt_close, 120) as dt_close, b.after_close, b.ppp,
                 a.user_id, a.image, a.salesman_id, c.salesman_name 
-                from OPENQUERY([MYSQL], 'SELECT * FROM order_book_hdr order by tr_date desc LIMIT 100') a
+                from order_book_hdr a
                 left outer join view_sc_preorder b on a.order_id = b.order_id 
                 left outer join salesman c on a.salesman_id = c.salesman_id
                 $where and a.salesman_id = '$salesid' order by a.tr_date desc
@@ -531,7 +531,7 @@ class POSTController extends Controller
                 ltrim(rtrim(a.cust_id)) as cust_id , ltrim(rtrim(a.cust_name)) as cust_name, b.day_change,
                 ltrim(rtrim(b.mpf_id)) as mpf_id, convert(varchar(10), b.dt_close, 120) as dt_close, b.after_close, b.ppp,
                 a.user_id, a.image, a.salesman_id, c.salesman_name 
-                from OPENQUERY([MYSQL], 'SELECT * FROM order_book_hdr order by tr_date desc LIMIT 100') a
+                from order_book_hdr a
                 left outer join view_sc_preorder b on a.order_id = b.order_id 
                 left outer join salesman c on a.salesman_id = c.salesman_id
                 $where and a.cust_id = '$custid' order by a.tr_date desc
@@ -561,7 +561,7 @@ class POSTController extends Controller
                 ltrim(rtrim(a.cust_id)) as cust_id , ltrim(rtrim(a.cust_name)) as cust_name, b.day_change,
                 ltrim(rtrim(b.mpf_id)) as mpf_id, convert(varchar(10), b.dt_close, 120) as dt_close, b.after_close, b.ppp,
                 a.user_id, a.image, a.salesman_id, c.salesman_name 
-                from OPENQUERY([MYSQL], 'SELECT * FROM order_book_hdr order by tr_date desc LIMIT 100') a
+                from order_book_hdr a
                 left outer join view_sc_preorder b on a.order_id = b.order_id 
                 left outer join salesman c on a.salesman_id = c.salesman_id
                 $where order by a.tr_date desc
