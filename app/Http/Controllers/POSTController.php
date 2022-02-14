@@ -457,7 +457,7 @@ class POSTController extends Controller
 
                 $data = DB::connection("sqlsrv4")
                 ->select(DB::raw("
-                select a.stat, b.stat as last_stat, case when b.stat is null then 'N/A'
+                select a.stat, a.stat as last_stat, case when b.stat is null then 'N/A'
                 else b.stat end as sc_stat, a.book_id,
                 convert(varchar(10), a.tr_date, 120) as tr_date,
                 convert(varchar(10), b.dt_order, 120) as dt_order, 
@@ -523,7 +523,7 @@ class POSTController extends Controller
 
                 $data = DB::connection("sqlsrv4")
                 ->select(DB::raw("
-                select a.stat, b.stat as last_stat, case when b.stat is null then 'N/A'
+                select a.stat, a.stat as last_stat, case when b.stat is null then 'N/A'
                 else b.stat end as sc_stat, a.book_id,
                 convert(varchar(10), a.tr_date, 120) as tr_date,
                 convert(varchar(10), b.dt_order, 120) as dt_order, 
@@ -553,7 +553,7 @@ class POSTController extends Controller
             try{
                 $data = DB::connection("sqlsrv4")
                 ->select(DB::raw("
-                select a.stat, b.stat as last_stat, case when b.stat is null then 'N/A'
+                select a.stat, a.stat as last_stat, case when b.stat is null then 'N/A'
                 else b.stat end as sc_stat, a.book_id,
                 convert(varchar(10), a.tr_date, 120) as tr_date,
                 convert(varchar(10), b.dt_order, 120) as dt_order, 
