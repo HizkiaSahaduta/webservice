@@ -356,7 +356,7 @@ class POSTController extends Controller
 
         if(!$skuAll && !$scAll && !$skuOpen && !$skuPosted && !$skuQuot && !$skuConfirm && !$skuClosed && !$skuReject && !$scOpen && !$scClosed && !$scReject) {
 
-            // $where .= " and a.stat not in ('C', 'X')";
+            $where .= " and b.stat not in ('C', 'X')";
         }
 
         if ($skuAll) {

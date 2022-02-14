@@ -322,7 +322,7 @@ class GETController extends Controller
                     item_num, LTRIM(RTRIM(descr)) as item, req_shipx, leat_time, wgt_ord, wgt_sisa,
                     LTRIM(RTRIM(lpm_id)) as lpm_id, FORMAT(dt_trx, 'dd MMM yyyy') as dt_lpm, FORMAT(valid_date, 'dd MMM yyyy') as dt_lpm_valid, wgt_lpm,
                     LTRIM(RTRIM(deliv_id)) as deliv_id, FORMAT(dt_deliv, 'dd MMM yyyy') as dt_deliv, wgt_deliv
-                    from vtrack 
+                    from tracking_order 
                     where book_id = '$book_id'"));
 
             //$response = ['data' => $data];
