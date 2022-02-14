@@ -431,8 +431,6 @@ class POSTController extends Controller
 
         // }
 
-        dd($where);
-
         if ($groupid == 'SALES') {
 
             try{
