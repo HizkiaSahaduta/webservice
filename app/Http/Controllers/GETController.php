@@ -394,7 +394,9 @@ class GETController extends Controller
 
             $scs = DB::connection("sqlsrv4")
                         ->select(DB::raw("
-                        select count(order_id) as jml_sc, sum(amt_total) as total from order_mast where cust_id = '$txtCustID' and stat <> 'C'
+                            select count(DISTINCT a.order_id) as jml_sc, sum((a.wgt_ord - a.wgt_shipped) * b.unit_price) as total 
+                            from view_order_status a join order_item b on a.order_id = b.order_id and a.item_num = b.item_num
+                            where a.cust_id = '$txtCustID' AND a.wgt_outstanding > 1500
                         "));
 
             foreach ($scs as $sc) {
