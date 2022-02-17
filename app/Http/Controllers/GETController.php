@@ -369,7 +369,7 @@ class GETController extends Controller
 
             foreach ($credits as $credit) {
 
-                $total_credit_limit = "IDR. ".number_format($credit->amt_credit_limit,2,",",".");
+                $total_credit_limit = "IDR. ".number_format($credit->amt_credit_limit,0,",",".");
 
             }
 
@@ -378,7 +378,7 @@ class GETController extends Controller
 
             foreach ($giros as $giro) {
 
-                $total_giro = "IDR. ".number_format($giro->giro_amt,2,",",".");
+                $total_giro = "IDR. ".number_format($giro->giro_amt,0,",",".");
 
             }
 
