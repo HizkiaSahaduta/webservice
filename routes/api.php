@@ -49,6 +49,8 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/dashboardOrderCustGroup', 'GETController@dashboardOrderCustGroup')->middleware('api.admin')->name('dashboardOrderCustGroup');
     Route::get('/dashboardOrderbyCustID', 'GETController@dashboardOrderbyCustID')->middleware('api.admin')->name('dashboardOrderbyCustID');
     Route::get('/getOutstandingDeliv', 'GETController@getOutstandingDeliv')->middleware('api.admin')->name('getOutstandingDeliv');
+    Route::get('/getListInvPiutangCust', 'GETController@getListInvPiutangCust')->middleware('api.admin')->name('getListInvPiutangCust');
+    Route::get('/getListGiroCust', 'GETController@getListGiroCust')->middleware('api.admin')->name('getListGiroCust');
 
 
     // POST Request
