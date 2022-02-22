@@ -500,7 +500,17 @@ class GETController extends Controller
                     where a.dt_inv >= DATEADD(M, -12, GETDATE()) and d.cust_id = '$txtCustID'
                     group by b.prod_code, c.descr "));
 
-                    
+            $list_inv_piutang = DB::connection("sqlsrv4")
+                                ->select(DB::raw("select a.inv_id, a.order_id, a.dt_due, (a.amt_total - amt_paid - amt_retur) as amt_owe 
+                                from inv_mast a 
+                                JOIN order_mast b ON a.mill_id = b.mill_id AND a.order_id = b.order_id 
+                                left outer join customer c ON a.mill_id = c.mill_id and b.cust_id = c.cust_id 
+                                where a.mill_id = 'SR' AND c.cust_id = '$txtCustID' AND paid_flag <> 'Y' and (a.amt_total - amt_paid - amt_retur)
+                                <> 0 ORDER BY a.dt_due "));
+            
+            $list_giro = DB::connection("sqlsrv4")
+                                ->select(DB::raw("SELECT a.giro_num, b.bank_name, dt_giro, (giro_amt - used_amt) as giro_amt FROM giro_rcv a 
+                                join bank_mast b on a.bank_id = b.bank_id WHERE cust_id = '$txtCustID' and (giro_amt - used_amt) > 0 order by dt_giro desc"));
             
             $data = ['order_blm_kirim_jml' => $order_blm_kirim_jml,
                     'order_blm_kirim_wgt' => $order_blm_kirim_wgt,
@@ -521,7 +531,9 @@ class GETController extends Controller
                     'jml_sc' => $jml_sc,
                     'total_sc' => $total_sc,
                     'jml_quote' => $jml_quote,
-                    'total_quote' => $total_quote
+                    'total_quote' => $total_quote,
+                    'list_inv_piutang' => $list_inv_piutang,
+                    'list_giro' => $list_giro
                 ];
 
             return response($data, 200);
