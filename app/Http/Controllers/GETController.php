@@ -510,7 +510,7 @@ class GETController extends Controller
             
             $list_giro = DB::connection("sqlsrv4")
                                 ->select(DB::raw("SELECT a.giro_num, b.bank_name, dt_giro, (giro_amt - used_amt) as giro_amt FROM giro_rcv a 
-                                join bank_mast b on a.bank_id = b.bank_id WHERE cust_id = '$txtCustID' and (giro_amt - used_amt) > 0 order by dt_giro desc"));
+                                join bank_mast b on a.bank_id = b.bank_id WHERE cust_id = '$txtCustID' and (giro_amt - used_amt) > 0 and stat <> 'C' order by dt_giro desc"));
             
             $data = ['order_blm_kirim_jml' => $order_blm_kirim_jml,
                     'order_blm_kirim_wgt' => $order_blm_kirim_wgt,
