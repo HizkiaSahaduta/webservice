@@ -939,8 +939,9 @@ class GETController extends Controller
             $txtCustID = $request->custid;
 
             $data = DB::connection("sqlsrv4")
-                                ->select(DB::raw("SELECT a.giro_num, b.bank_name, dt_giro, (giro_amt - used_amt) as giro_amt FROM giro_rcv a 
-                                join bank_mast b on a.bank_id = b.bank_id WHERE cust_id = '$txtCustID' and (giro_amt - used_amt) > 0 and stat <> 'C' order by dt_giro desc"));
+                                ->select(DB::raw("
+                                SELECT a.giro_num, b.bank_name, dt_giro, (giro_amt - used_amt) as giro_amt FROM giro_rcv a 
+                                join bank_mast b on a.bank_id = b.bank_id WHERE cust_id = '$txtCustID' and (giro_amt - used_amt) > 0 and stat <> 'C' and a.clear_flag not in ('K', 'R') order by dt_giro"));
 
             return response($data, 200);
         }
