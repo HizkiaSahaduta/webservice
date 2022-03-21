@@ -143,6 +143,19 @@ return [
             'prefix_indexes' => true,
         ],
 
+        'sqlsrv6' => [
+            'driver' => 'sqlsrv',
+            'url' => env('DATABASE_URL'),
+            'host' => env('DB_HOST6', 'localhost'),
+            'port' => env('DB_PORT', '1433'),
+            'database' => env('DB_DATABASE6', 'forge'),
+            'username' => env('DB_USERNAME6', 'forge'),
+            'password' => env('DB_PASSWORD6', ''),
+            'charset' => 'utf8',
+            'prefix' => '',
+            'prefix_indexes' => true,
+        ],
+
 
     ],
 

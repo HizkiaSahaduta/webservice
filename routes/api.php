@@ -27,6 +27,9 @@ Route::group(['middleware' => ['cors', 'json.response']], function () {
     Route::get('/getUserExist', 'GETController@getUserExist')->name('getUserExist');
     Route::get('/getQuoteDetail', 'GETController@getQuoteDetail')->name('getQuoteDetail');
     Route::get('/getQuoteDetailConfirmed', 'GETController@getQuoteDetailConfirmed')->name('getQuoteDetailConfirmed');
+
+    Route::get('/getCustSvrKMB', 'GETController@getCustSvrKMB')->name('getCustSvrKMB');
+    Route::get('/getSalesSvrKMB', 'GETController@getSalesSvrKMB')->name('getSalesSvrKMB');
     
     Route::middleware('auth:api')->group(function () {
         Route::get('/getListEntity', 'GETController@listEntity')->middleware('api.admin')->name('getListEntity');

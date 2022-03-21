@@ -952,4 +952,35 @@ class GETController extends Controller
             return response($response, 422);
         }
     }
+
+
+    public function getCustSvrKMB(Request $request)
+    {
+        $search = $request->get('term');
+
+        $result = DB::connection('sqlsrv6')
+                    ->table('customer')
+                    ->Where('NamaCustomer', 'LIKE', '%'. $search. '%')
+					->where('active_flag', '=', 'Y')
+                    ->orWhere("CustomerId", "=",  $search  )
+                    ->take(25)
+                    ->get();
+
+        return response()->json($result);
+    }
+
+    public function getSalesSvrKMB(Request $request)
+    {
+        $search = $request->get('term');
+
+        $result = DB::connection('sqlsrv6')
+                    ->table('sales')
+                    ->Where('NamaSales', 'LIKE', '%'. $search. '%')
+					->where('active_flag', '=', 'Y')
+                    ->orWhere("SalesId", "=",  $search  )
+                    ->take(25)
+                    ->get();
+
+        return response()->json($result);
+    }
 }
