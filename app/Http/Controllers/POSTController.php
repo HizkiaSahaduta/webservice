@@ -352,6 +352,24 @@ class POSTController extends Controller
         $salesid = $request->salesid;
         $custid = $request->custid;
 
+        if($request->startDate != null || $request->startDate = '' )
+        {
+            $startDate = $request->startDate;
+        }
+        else
+        {
+            $startDate = '';
+        }
+
+        if($request->endDate != null || $request->endDate = '' )
+        {
+            $endDate = $request->endDate;
+        }
+        else
+        {
+            $endDate = '';
+        }
+
         $where = "where 1=1";
 
         if(!$skuAll && !$scAll && !$skuOpen && !$skuPosted && !$skuQuot && !$skuConfirm && !$skuClosed && !$skuReject && !$scOpen && !$scClosed && !$scReject) {
@@ -423,6 +441,20 @@ class POSTController extends Controller
 
             $where .= " and a.sc_stat = 'X'";
 
+        }
+
+        if (!empty($startDate))
+        {
+            if (!empty($endDate))
+            {
+                $where .= "and dt_order >= TRIM('$startDate') and dt_order <= TRIM('$endDate') ";
+            }
+            else
+            {
+                //$sqlWhere = $sqlWhere . "and dt_order = '" .$startDate. "'";
+				//$sqlWhere = $sqlWhere . "and dt_order >= TRIM('$startDate') and dt_order <= getDate() ";
+				$where .= "and dt_order between TRIM('$startDate') and format(getDate(), 'yyyyMMdd') ";
+            }
         }
 
         // if ($searchkey) {
