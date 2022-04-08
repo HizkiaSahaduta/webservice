@@ -707,6 +707,24 @@ class GETController extends Controller
         $custid = $request->custid;
         $salesid = $request->salesid;
         $privilege = $request->privilege;
+        $dt_start = $request->dt_start;
+        $dt_end = $request->dt_end;
+        $where = "";
+
+        if ($dt_start && !$dt_end) {
+
+            $where.= " and a.dt_order = '$dt_start'";
+        }
+
+        if (!$dt_start && $dt_end) {
+
+            $where.= " and a.dt_order = '$dt_end'";
+        }
+
+        if ($dt_start && $dt_end) {
+
+            $where.= " and a.dt_order between '$dt_start' and '$dt_end'";
+        }
 
         if ($custid) { 
 
@@ -732,7 +750,7 @@ class GETController extends Controller
                         END as remain
                         from tracking_order a
                         inner join prod_spec b on a.prod_code = b.prod_code
-                        where cust_id = '$custid' and order_id <> ''"));
+                        where cust_id = '$custid' and order_id <> '' "." ".$where.""));
     
                 //$response = ['data' => $data];
                 return response($data, 200);
@@ -772,7 +790,7 @@ class GETController extends Controller
                         from tracking_order a
                         inner join prod_spec b on a.prod_code = b.prod_code
                         inner join order_book_hdr c on a.book_id = c.book_id
-                        where c.salesman_id = '$salesid' and a.order_id <> ''"));
+                        where c.salesman_id = '$salesid' and a.order_id <> '' "." ".$where.""));
     
                 //$response = ['data' => $data];
                 return response($data, 200);
@@ -812,7 +830,7 @@ class GETController extends Controller
                         END as remain
                         from tracking_order a
                         inner join prod_spec b on a.prod_code = b.prod_code
-                        where order_id <> ''"));
+                        where order_id <> '' "." ".$where.""));
     
                 //$response = ['data' => $data];
                 return response($data, 200);
