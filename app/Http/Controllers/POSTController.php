@@ -447,13 +447,13 @@ class POSTController extends Controller
         {
             if (!empty($endDate))
             {
-                $where .= "and dt_order >= TRIM('$startDate') and dt_order <= TRIM('$endDate') ";
+                $where .= "and a.tr_date between $startDate and $endDate ";
             }
             else
             {
                 //$sqlWhere = $sqlWhere . "and dt_order = '" .$startDate. "'";
 				//$sqlWhere = $sqlWhere . "and dt_order >= TRIM('$startDate') and dt_order <= getDate() ";
-				$where .= "and dt_order between TRIM('$startDate') and format(getDate(), 'yyyyMMdd') ";
+				$where .= "and a.tr_date between $startDate and format(getDate(), 'yyyy-MM-dd') ";
             }
         }
 
