@@ -468,7 +468,7 @@ class POSTController extends Controller
 
         if (!empty($txtCustomer))
         {
-            $where .= " and b.cust_id = '$txtCustomer'";
+            $where .= " and a.cust_id = '$txtCustomer'";
         }
 
         // if ($searchkey) {
