@@ -370,6 +370,15 @@ class POSTController extends Controller
             $endDate = '';
         }
 
+        if($request->txtCustomer != null || $request->txtCustomer = '' )
+        {
+            $txtCustomer = $request->txtCustomer;
+        }
+        else
+        {
+            $txtCustomer = '';
+        }
+
         $where = "where 1=1";
 
         if(!$skuAll && !$scAll && !$skuOpen && !$skuPosted && !$skuQuot && !$skuConfirm && !$skuClosed && !$skuReject && !$scOpen && !$scClosed && !$scReject) {
@@ -455,6 +464,11 @@ class POSTController extends Controller
 				//$sqlWhere = $sqlWhere . "and dt_order >= TRIM('$startDate') and dt_order <= getDate() ";
 				$where .= "and a.tr_date between '$startDate' and format(getDate(), 'yyyy-MM-dd') ";
             }
+        }
+
+        if (!empty($txtCustomer))
+        {
+            $where .= " and b.cust_id = '$txtCustomer'";
         }
 
         // if ($searchkey) {
