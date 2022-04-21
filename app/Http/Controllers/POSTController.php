@@ -477,6 +477,8 @@ class POSTController extends Controller
 
         // }
 
+        dd($groupid);
+
         if ($groupid == 'SALES') {
 
             try{
