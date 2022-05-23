@@ -64,6 +64,7 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/submitApproval', 'POSTController@submitApproval')->middleware('api.admin')->name('submitApproval');
     Route::post('/getListOrder', 'POSTController@getListOrder')->middleware('api.admin')->name('getListOrder');
 	Route::post('/getOrderTracking', 'POSTController@getOrderTracking')->middleware('api.admin')->name('getOrderTracking');
+	Route::post('/getListOrdertoClose', 'POSTController@getListOrdertoClose')->middleware('api.admin')->name('getListOrdertoClose');
     
     
 });

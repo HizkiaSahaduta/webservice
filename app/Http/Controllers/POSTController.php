@@ -799,5 +799,89 @@ class POSTController extends Controller
 		return response($result);
 		
 	}
+
+    public function getListOrdertoClose(Request $request)
+    {
+        $where = "where 1=1";
+
+        if($request->startDate != null || $request->startDate = '' )
+        {
+            $startDate = $request->startDate;
+        }
+        else
+        {
+            $startDate = '';
+        }
+
+        if($request->endDate != null || $request->endDate = '' )
+        {
+            $endDate = $request->endDate;
+        }
+        else
+        {
+            $endDate = '';
+        }
+        
+        if($request->txtCustomer != null || $request->txtCustomer = '' )
+        {
+            $txtCustomer = $request->txtCustomer;
+        }
+        else
+        {
+            $txtCustomer = '';
+        }
+
+        if($request->txtSales != null || $request->txtSales = '' )
+        {
+            $txtSales = $request->txtSales;
+        }
+        else
+        {
+            $txtSales = '';
+        }
+
+        try{
+
+            if (!empty($startDate))
+            {
+                if (!empty($endDate))
+                {
+                    $where .= "and dt_order between '$startDate' and '$endDate' ";
+                }
+                else
+                {
+                    $where .= "and dt_order between '$startDate' and format(getDate(), 'yyyy-MM-dd') ";
+                }
+            }
+
+            if (!empty($txtCustomer))
+            {
+                $where .= " and cust_id = '$txtCustomer'";
+            }
+
+            if (!empty($txtSales))
+            {
+                $where .= " and salesman_id = '$txtSales'";
+            }
+
+
+            $data = DB::connection("sqlsrv4")
+                    ->select(DB::raw("
+                    SELECT * 
+                    FROM 
+                    View_Sc_To_Close
+                    $where order by dt_order desc
+                    "));
+
+                    
+            return response($data, 200);
+        }
+        catch(QueryException $ex){
+
+            $error = $ex->getMessage();
+            $response = ['message' => $error];
+            return response($response, 422);
+        }
+    }
 	
 }
