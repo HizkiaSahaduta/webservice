@@ -976,10 +976,19 @@ class GETController extends Controller
     {
         $search = $request->get('term');
 
+        if ($request->sales_id) {
+            $whereSql = [
+                ['SalesId', '=', $request->sales_id]
+            ];
+        } else {
+            $whereSql = null;
+        }
+
         $result = DB::connection('sqlsrv6')
                     ->table('customer')
                     ->Where('NamaCustomer', 'LIKE', '%'. $search. '%')
 					->where('active_flag', '=', 'Y')
+                    ->where($whereSql)
                     ->orWhere("CustomerId", "=",  $search  )
                     ->take(25)
                     ->get();
@@ -991,10 +1000,19 @@ class GETController extends Controller
     {
         $search = $request->get('term');
 
+        if ($request->sales_id) {
+            $whereSql = [
+                ['SalesId', '=', $request->sales_id]
+            ];
+        } else {
+            $whereSql = null;
+        }
+
         $result = DB::connection('sqlsrv6')
                     ->table('sales')
                     ->Where('NamaSales', 'LIKE', '%'. $search. '%')
 					->where('active_flag', '=', 'Y')
+                    ->where($whereSql)
                     ->orWhere("SalesId", "=",  $search  )
                     ->take(25)
                     ->get();
