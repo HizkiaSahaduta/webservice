@@ -381,6 +381,7 @@ class POSTController extends Controller
         }
 
         $where = "where 1=1";
+        $whereQuote = "where 1=1";
 
         if(!$skuAll && !$scAll && !$skuOpen && !$skuPosted && !$skuQuot && !$skuConfirm && !$skuClosed && !$skuReject && !$scOpen && !$scClosed && !$scReject) {
 
@@ -454,7 +455,7 @@ class POSTController extends Controller
         }
 
         if($skuNew){
-            $where .= " and (b.quote_id = '' or b.quote_id = NULL)";
+            $whereQuote .= " and (b.quote_id = '' or b.quote_id = NULL)";
         }
 
 
@@ -523,7 +524,8 @@ class POSTController extends Controller
                 b.user_id, b.image, b.salesman_id, b.quote_id
                 from 
                 view_sc_preorder a 
-                right join OPENQUERY([MYSQL], 'SELECT  cust_id, tr_date, book_id, quote_id, stat, order_id, cust_name, user_id, image, salesman_id  FROM order_book_hdr') b on a.order_id = b.order_id) a
+                right join OPENQUERY([MYSQL], 'SELECT  cust_id, tr_date, book_id, quote_id, stat, order_id, cust_name, user_id, image, salesman_id  FROM order_book_hdr') b on a.order_id = b.order_id
+                $whereQuote) a
                 left join salesman b on a.salesman_id = b.salesman_id
                 inner join OPENQUERY([MYSQL], 'SELECT book_id FROM order_book_dtl') c on a.book_id = c.book_id
                 $where and a.salesman_id = '$salesid' order by a.tr_date desc
@@ -595,7 +597,8 @@ class POSTController extends Controller
                 b.user_id, b.image, b.salesman_id, b.quote_id
                 from 
                 view_sc_preorder a 
-                right join OPENQUERY([MYSQL], 'SELECT  cust_id, tr_date, book_id, quote_id, stat, order_id, cust_name, user_id, image, salesman_id  FROM order_book_hdr') b on a.order_id = b.order_id) a
+                right join OPENQUERY([MYSQL], 'SELECT  cust_id, tr_date, book_id, quote_id, stat, order_id, cust_name, user_id, image, salesman_id  FROM order_book_hdr') b on a.order_id = b.order_id 
+                $whereQuote) a
                 left join salesman b on a.salesman_id = b.salesman_id
                 inner join OPENQUERY([MYSQL], 'SELECT book_id FROM order_book_dtl') c on a.book_id = c.book_id
                 $where and a.cust_id = '$custid' order by a.tr_date desc
@@ -631,7 +634,8 @@ class POSTController extends Controller
                 b.user_id, b.image, b.salesman_id, b.quote_id
                 from 
                 view_sc_preorder a 
-                right join OPENQUERY([MYSQL], 'SELECT  cust_id, tr_date, book_id, quote_id, stat, order_id, cust_name, user_id, image, salesman_id  FROM order_book_hdr') b on a.order_id = b.order_id) a
+                right join OPENQUERY([MYSQL], 'SELECT  cust_id, tr_date, book_id, quote_id, stat, order_id, cust_name, user_id, image, salesman_id  FROM order_book_hdr') b on a.order_id = b.order_id
+                $whereQuote) a
                 left join salesman b on a.salesman_id = b.salesman_id
                 inner join OPENQUERY([MYSQL], 'SELECT book_id FROM order_book_dtl') c on a.book_id = c.book_id
                 $where order by a.tr_date desc
