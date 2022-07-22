@@ -352,6 +352,7 @@ class POSTController extends Controller
         $salesid = $request->salesid;
         $custid = $request->custid;
         $skuNew =  $request->skuNew;
+        $txtSkuId =  $request->txtSkuId;
 
         if($request->startDate != null || $request->startDate = '' )
         {
@@ -456,6 +457,10 @@ class POSTController extends Controller
 
         if($skuNew){
             $whereQuote .= " and (b.quote_id = '' or b.quote_id = NULL)";
+        }
+
+        if($txtSkuId){
+            $whereQuote .= " and b.book_id = '$txtSkuId'";
         }
 
 
