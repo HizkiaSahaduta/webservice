@@ -351,6 +351,7 @@ class POSTController extends Controller
         $groupid = $request->groupid;
         $salesid = $request->salesid;
         $custid = $request->custid;
+        $skuNew =  $request->skuNew;
 
         if($request->startDate != null || $request->startDate = '' )
         {
@@ -452,6 +453,11 @@ class POSTController extends Controller
 
         }
 
+        if($skuNew){
+            $where .= " and (b.quote_id = '' or b.quote_id = NULL)";
+        }
+
+
         if (!empty($startDate))
         {
             if (!empty($endDate))
@@ -514,7 +520,7 @@ class POSTController extends Controller
                 ltrim(rtrim(b.order_id)) as order_id, 
                 ltrim(rtrim(b.cust_id)) as cust_id , ltrim(rtrim(b.cust_name)) as cust_name, a.day_change,
                 ltrim(rtrim(a.mpf_id)) as mpf_id, convert(varchar(10), a.dt_close, 120) as dt_close, a.after_close, a.ppp,
-                b.user_id, b.image, b.salesman_id
+                b.user_id, b.image, b.salesman_id, b.quote_id
                 from 
                 view_sc_preorder a 
                 right join OPENQUERY([MYSQL], 'SELECT  cust_id, tr_date, book_id, quote_id, stat, order_id, cust_name, user_id, image, salesman_id  FROM order_book_hdr') b on a.order_id = b.order_id) a
@@ -586,7 +592,7 @@ class POSTController extends Controller
                 ltrim(rtrim(b.order_id)) as order_id, 
                 ltrim(rtrim(b.cust_id)) as cust_id , ltrim(rtrim(b.cust_name)) as cust_name, a.day_change,
                 ltrim(rtrim(a.mpf_id)) as mpf_id, convert(varchar(10), a.dt_close, 120) as dt_close, a.after_close, a.ppp,
-                b.user_id, b.image, b.salesman_id
+                b.user_id, b.image, b.salesman_id, b.quote_id
                 from 
                 view_sc_preorder a 
                 right join OPENQUERY([MYSQL], 'SELECT  cust_id, tr_date, book_id, quote_id, stat, order_id, cust_name, user_id, image, salesman_id  FROM order_book_hdr') b on a.order_id = b.order_id) a
@@ -622,7 +628,7 @@ class POSTController extends Controller
                 ltrim(rtrim(b.order_id)) as order_id, 
                 ltrim(rtrim(b.cust_id)) as cust_id , ltrim(rtrim(b.cust_name)) as cust_name, a.day_change,
                 ltrim(rtrim(a.mpf_id)) as mpf_id, convert(varchar(10), a.dt_close, 120) as dt_close, a.after_close, a.ppp,
-                b.user_id, b.image, b.salesman_id
+                b.user_id, b.image, b.salesman_id, b.quote_id
                 from 
                 view_sc_preorder a 
                 right join OPENQUERY([MYSQL], 'SELECT  cust_id, tr_date, book_id, quote_id, stat, order_id, cust_name, user_id, image, salesman_id  FROM order_book_hdr') b on a.order_id = b.order_id) a
