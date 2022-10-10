@@ -1019,4 +1019,54 @@ class GETController extends Controller
 
         return response()->json($result);
     }
+
+    public function getCustSvrVivo(Request $request)
+    {
+        $search = $request->get('term');
+
+        if ($request->sales_id) {
+            $whereSql = [
+                ['SalesId', '=', $request->sales_id]
+            ];
+        } else {
+            $whereSql = null;
+        }
+
+        $result = DB::connection('sqlsrv3')
+                    ->table('Customer')
+                    ->Where('NamaCustomer', 'LIKE', '%'. $search. '%')
+					->where('active_flag', '=', 'Y')
+					->where('cv_id', '=', '00')
+                    ->where($whereSql)
+                    ->orWhere("CustomerId", "=",  $search  )
+                    ->take(25)
+                    ->get();
+
+        return response()->json($result);
+    }
+
+    public function getSalesSvrVivo(Request $request)
+    {
+        $search = $request->get('term');
+
+        if ($request->sales_id) {
+            $whereSql = [
+                ['SalesId', '=', $request->sales_id]
+            ];
+        } else {
+            $whereSql = null;
+        }
+
+        $result = DB::connection('sqlsrv3')
+                    ->table('Sales')
+                    ->Where('NamaSales', 'LIKE', '%'. $search. '%')
+					->where('active_flag', '=', 'Y')
+					->where('office_id', '>', 50)
+                    ->where($whereSql)
+                    ->orWhere("SalesId", "=",  $search  )
+                    ->take(25)
+                    ->get();
+
+        return response()->json($result);
+    }
 }
