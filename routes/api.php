@@ -33,6 +33,7 @@ Route::group(['middleware' => ['cors', 'json.response']], function () {
 
     Route::get('/getCustSvrVivo', 'GETController@getCustSvrVivo')->name('getCustSvrVivo');
     Route::get('/getSalesSvrVivo', 'GETController@getSalesSvrVivo')->name('getSalesSvrVivo');
+    Route::get('/getOrderSvrVivo', 'GETController@getOrderSvrVivo')->name('getOrderSvrVivo');
     
     Route::middleware('auth:api')->group(function () {
         Route::get('/getListEntity', 'GETController@listEntity')->middleware('api.admin')->name('getListEntity');

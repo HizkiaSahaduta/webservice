@@ -6,6 +6,7 @@ use DB;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Database\QueryException;
+use GuzzleHttp\Client;
 
 class GETController extends Controller
 {
@@ -1069,4 +1070,28 @@ class GETController extends Controller
 
         return response()->json($result);
     }
+
+    public function getOrderSvrVivo(Request $request)
+    {
+        $url = 'https://preorder.bajaringanvivo.co.id/api/orders';
+
+		$datas = $this->sendRequest('GET', $url, null);
+
+        return response()->json($datas);
+    }
+
+    protected function sendRequest($option, $url, $data = null)
+	{
+        $client = new Client;
+
+		$result = $client->request($option, $url, [
+			'headers' => [
+				'Content-Type' => 'application/json',
+				'Accept' => 'application/json'
+			],
+			'json' => $data
+		]);
+
+        return json_decode($result->getBody(), true);
+	}
 }
