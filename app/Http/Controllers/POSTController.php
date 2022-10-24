@@ -6,6 +6,7 @@ use DB;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Database\QueryException;
+use GuzzleHttp\Client;
 
 class POSTController extends Controller
 {
@@ -898,5 +899,33 @@ class POSTController extends Controller
             return response($response, 422);
         }
     }
+
+    public function postDeclineOrderSvrVivo(Request $request)
+    {
+        $url = 'https://preorder.bajaringanvivo.co.id/api/orders/decline';
+
+        $payloads = [
+            'no_order' => $request->no_order,
+            'decline_notes' => $request->decline_notes
+        ];
+		$datas = $this->sendRequest('POST', $url, $payloads);
+
+        return response()->json($datas);
+    }
+
+    protected function sendRequest($option, $url, $data = null)
+	{
+        $client = new Client;
+
+		$result = $client->request($option, $url, [
+			'headers' => [
+				'Content-Type' => 'application/json',
+				'Accept' => 'application/json'
+			],
+			'json' => $data
+		]);
+
+        return json_decode($result->getBody(), true);
+	}
 	
 }
