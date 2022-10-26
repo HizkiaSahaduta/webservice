@@ -1073,7 +1073,7 @@ class GETController extends Controller
 
     public function getOrderSvrVivo(Request $request)
     {
-        $url = 'https://preorder.bajaringanvivo.co.id/api/orders';
+        $url = 'https://preorder.bajaringanvivo.co.id/api/orders?sales_id=' . $request->sales_id . '&office_id=' . $request->office_id . '&cust_id=' . $request->cust_id . '&order_id=' . $request->order_id . '&start_date=' . $request->start_date . '&end_date=' . $request->end_date;
 
 		$datas = $this->sendRequest('GET', $url, null);
 
