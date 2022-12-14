@@ -1065,6 +1065,7 @@ class GETController extends Controller
 					->where('office_id', '>', 50)
                     ->where($whereSql)
                     ->orWhere("SalesId", "=",  $search  )
+                    ->orWhere("SalesId", "=",  'ARIF BUDIMAN')
                     ->take(25)
                     ->get();
 
