@@ -538,7 +538,7 @@ class POSTController extends Controller
                 "));
 
                   
-                return response($data, 200);
+                return response($data ? $data : [], 200);
             }
             catch(QueryException $ex){
     
