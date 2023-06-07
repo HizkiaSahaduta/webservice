@@ -70,7 +70,7 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/getListOrder', 'POSTController@getListOrder')->middleware('api.admin')->name('getListOrder');
 	Route::post('/getOrderTracking', 'POSTController@getOrderTracking')->middleware('api.admin')->name('getOrderTracking');
 	Route::post('/getListOrdertoClose', 'POSTController@getListOrdertoClose')->middleware('api.admin')->name('getListOrdertoClose');
-    
+	Route::post('/getPricePreorder', 'POSTController@getPricePreorder')->middleware('api.admin')->name('getPricePreorder');    
     
 });
 

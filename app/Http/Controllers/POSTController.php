@@ -927,5 +927,33 @@ class POSTController extends Controller
 
         return json_decode($result->getBody(), true);
 	}
+
+    public function getPricePreorder(Request $request) 
+    {
+        $txtStrata = $request->txtStrata;
+        $txtCustID = $request->txtCustID;
+        $txtStr1 = $request->txtStr1;
+        $txtDelivMode = $request->txtDelivMode;
+        $txtProduct = $request->txtProduct;
+
+        try {
+
+            $data = DB::connection("sqlsrv4")->select(DB::raw("SELECT '$txtCustID' as cust_id, '$txtStrata' as strata, '$txtStr1' str1, a.commodity_id, a.prod_code,
+            a.series_id, a.thick, a.coat_mass, a.quality_id, 
+            ifnull((select b.std_price from price_list b where b.series_id = a.series_id and a.thick = b.thick and
+            a.coat_mass = b.coat_mass),0) as stdprice, 
+            ifnull((select c.int2 from appl_constant c where c.key_id = 'STRATA' and c.str1 = '$txtStrata'),0) as DiskonStrata ,
+            ifnull((select f.int2 from appl_constant f where f.key_id = 'QUALITY' and f.str1 = a.quality_id),0) as DiskonQuality ,
+            ifnull((select d.int2 from appl_constant d where d.key_id = 'DELIV' and d.str1 =  '$txtStr1'),0) as Diskondeliv ,
+            ifnull((select e.int2 from appl_constant e where e.key_id = 'SLITING' and e.str1 =  a.thick),0) as BiayaSlit
+            from prod_spec a
+            where category_id = 1  and a.prod_code = '$txtProduct'"));
+
+            return response()->json($data);
+        } catch(QueryException $ex){
+            $error = $ex->getMessage();
+            return response()->json(['response' => $error]);
+        }
+	}
 	
 }
