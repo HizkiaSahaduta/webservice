@@ -1081,6 +1081,64 @@ class GETController extends Controller
         return response()->json($datas);
     }
 
+
+    public function getCustSvrGbrk(Request $request)
+    {
+        $search = $request->get('term');
+
+        if ($request->sales_id) {
+            $whereSql = [
+                ['SalesId', '=', $request->sales_id]
+            ];
+        } else {
+            $whereSql = null;
+        }
+
+        $result = DB::connection('sqlsrvGbrk')
+                    ->table('Customer')
+                    ->Where('NamaCustomer', 'LIKE', '%'. $search. '%')
+					->where('active_flag', '=', 'Y')
+                    ->where($whereSql)
+                    ->orWhere("CustomerId", "=",  $search  )
+                    ->take(25)
+                    ->get();
+
+        return response()->json($result);
+    }
+
+    public function getSalesSvrGbrk(Request $request)
+    {
+        $search = $request->get('term');
+
+        if ($request->sales_id) {
+            $whereSql = [
+                ['SalesId', '=', $request->sales_id]
+            ];
+        } else {
+            $whereSql = null;
+        }
+
+        $result = DB::connection('sqlsrvGbrk')
+                    ->table('Sales')
+                    ->Where('NamaSales', 'LIKE', '%'. $search. '%')
+					->where('active_flag', '=', 'Y')
+                    ->where($whereSql)
+                    ->orWhere("SalesId", "=",  $search  )
+                    ->take(25)
+                    ->get();
+
+        return response()->json($result);
+    }
+
+    public function getOrderSvrGbrk(Request $request)
+    {
+        $url = 'https://preorder.geraibajaringan.co.id/api/orders?sales_id=' . $request->sales_id . '&office_id=' . $request->office_id . '&cust_id=' . $request->cust_id . '&order_id=' . $request->order_id . '&start_date=' . $request->start_date . '&end_date=' . $request->end_date;
+
+		$datas = $this->sendRequest('GET', $url, null);
+
+        return response()->json($datas);
+    }
+
     protected function sendRequest($option, $url, $data = null)
 	{
         $client = new Client;

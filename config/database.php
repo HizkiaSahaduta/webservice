@@ -156,6 +156,19 @@ return [
             'prefix_indexes' => true,
         ],
 
+        'sqlsrvGbrk' => [
+            'driver' => 'sqlsrv',
+            'url' => env('DATABASE_URL'),
+            'host' => env('DB_HOST_GBRK', 'localhost'),
+            'port' => env('DB_PORT', '1433'),
+            'database' => env('DB_DATABASE_GBRK', 'forge'),
+            'username' => env('DB_USERNAME_GBRK', 'forge'),
+            'password' => env('DB_PASSWORD_GBRK', ''),
+            'charset' => 'utf8',
+            'prefix' => '',
+            'prefix_indexes' => true,
+        ],
+
 
     ],
 
