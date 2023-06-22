@@ -913,6 +913,19 @@ class POSTController extends Controller
         return response()->json($datas);
     }
 
+    public function postDeclineOrderSvrGbrk(Request $request)
+    {
+        $url = 'https://preorder.geraibajaringan.co.id/api/orders/decline';
+
+        $payloads = [
+            'no_order' => $request->no_order,
+            'decline_notes' => $request->decline_notes
+        ];
+		$datas = $this->sendRequest('POST', $url, $payloads);
+
+        return response()->json($datas);
+    }
+
     protected function sendRequest($option, $url, $data = null)
 	{
         $client = new Client;
