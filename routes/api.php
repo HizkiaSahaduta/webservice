@@ -40,6 +40,7 @@ Route::group(['middleware' => ['cors', 'json.response']], function () {
     Route::get('/getSalesSvrGbrk', 'GETController@getSalesSvrGbrk')->name('getSalesSvrGbrk');
     Route::get('/getOrderSvrGbrk', 'GETController@getOrderSvrGbrk')->name('getOrderSvrGbrk');
     Route::post('/postDeclineOrderSvrGbrk', 'POSTController@postDeclineOrderSvrGbrk');
+    Route::get('/getMachineTypeSvrGbrk', 'GETController@getMachineTypeSvrGbrk')->name('getMachineTypeSvrGbrk');
     
     Route::middleware('auth:api')->group(function () {
         Route::get('/getListEntity', 'GETController@listEntity')->middleware('api.admin')->name('getListEntity');

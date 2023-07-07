@@ -1153,4 +1153,14 @@ class GETController extends Controller
 
         return json_decode($result->getBody(), true);
 	}
+
+    public function getMachineTypeSvrGbrk(Request $request)
+    {
+        $result = DB::connection('sqlsrvGbrk')
+                    ->table('machine_type')
+					->where('active_flag', '=', 'Y')
+                    ->get();
+
+        return response()->json($result);
+    }
 }
