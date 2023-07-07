@@ -1163,4 +1163,19 @@ class GETController extends Controller
 
         return response()->json($result);
     }
+
+    public function getBarangJadiSvrGbrk(Request $request)
+    {
+        $search = $request->search;
+
+        $result = DB::connection('sqlsrvGbrk')
+                    ->table('BarangJadi')
+                    ->Where('NamaBarang', 'LIKE', '%'. $search. '%')
+					->where('active_flag', '=', 'Y')
+                    ->take(25)
+                    ->get();
+
+        return response()->json($result);
+    }
+
 }
