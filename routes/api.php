@@ -42,6 +42,7 @@ Route::group(['middleware' => ['cors', 'json.response']], function () {
     Route::post('/postDeclineOrderSvrGbrk', 'POSTController@postDeclineOrderSvrGbrk');
     Route::get('/getMachineTypeSvrGbrk', 'GETController@getMachineTypeSvrGbrk')->name('getMachineTypeSvrGbrk');
     Route::get('/getBarangJadiSvrGbrk', 'GETController@getBarangJadiSvrGbrk')->name('getBarangJadiSvrGbrk');
+    Route::post('/getDetailBarangJadiSvrGbrk', 'GETController@getDetailBarangJadiSvrGbrk')->name('getDetailBarangJadiSvrGbrk');
     
     Route::middleware('auth:api')->group(function () {
         Route::get('/getListEntity', 'GETController@listEntity')->middleware('api.admin')->name('getListEntity');
