@@ -1189,4 +1189,14 @@ class GETController extends Controller
         return response()->json($result);
     }
 
+    public function getPriceGbrk(Request $request)
+    {
+        $result = DB::connection('sqlsrvGbrk')
+                    ->table('v_pricing')
+                    ->selectRaw('TRIM(brand_id) as brand_id, TRIM(machine_type_id) as machine_type_id, thick, matrl_width, TRIM(region_id) as region_id, price, TRIM(category_id) as category_id')
+                    ->get();
+
+        return response()->json($result);
+    }
+
 }
